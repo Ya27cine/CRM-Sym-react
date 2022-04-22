@@ -13,6 +13,8 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+
+        $chrono = 1;
         // $product = new Product();
         for ($i=0; $i < 17; $i++) { 
             $customer  = new Customer();
@@ -28,7 +30,8 @@ class AppFixtures extends Fixture
                 $invoice->setAmount( $faker->randomFloat(2, 250, 5000))
                 ->setCustomer($customer)
                 ->setSentAt( $faker->dateTimeBetween('-6 months'))
-                ->setStatus( $faker->randomElement(['PAID', 'CANCELLED', 'SENT']));
+                ->setStatus( $faker->randomElement(['PAID', 'CANCELLED', 'SENT']))
+                ->setChrono($chrono++);
 
                 $manager->persist($invoice);
             }

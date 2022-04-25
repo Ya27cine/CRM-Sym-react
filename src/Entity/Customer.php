@@ -56,7 +56,7 @@ class Customer
 
     /**
      * @ORM\OneToMany(targetEntity=Invoice::class, mappedBy="customer")
-     * @Groups({"customers_read", "invoice_read"})
+     * @Groups({"customers_read"})
      */
     private $invoices;
 

@@ -26,25 +26,25 @@ class Invoice
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read", "customers_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read", "customers_read"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read", "customers_read"})
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read", "customers_read"})
      */
     private $status;
 
@@ -57,7 +57,7 @@ class Invoice
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read", "customers_read"})
      */
     private $chrono;
 

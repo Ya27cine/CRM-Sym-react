@@ -17,6 +17,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *                  "pagination_enabled":true,
  *                  "order"={"sentAt":"DESC"}
  *    },
+ *    subresourceOperations={
+ *              "api_customers_invoices_get_subresource" = { 
+ *                              "normalization_context" = { 
+ *                                                              "groups" = { "invoices_subresource"}
+ *                                }
+ *              }
+ *    },
  *    normalizationContext={"groups"={"invoice_read"}}
  * )
  * @ApiFilter(OrderFilter::class, properties={"amount", "sentAt"})
@@ -27,25 +34,25 @@ class Invoice
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoice_read", "customers_read"})
+     * @Groups({"invoice_read", "customers_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice_read", "customers_read"})
+     * @Groups({"invoice_read", "customers_read", "invoices_subresource"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoice_read", "customers_read"})
+     * @Groups({"invoice_read", "customers_read",  "invoices_subresource"})
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice_read", "customers_read"})
+     * @Groups({"invoice_read", "customers_read",  "invoices_subresource"})
      */
     private $status;
 
@@ -58,13 +65,13 @@ class Invoice
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoice_read", "customers_read"})
+     * @Groups({"invoice_read", "customers_read",  "invoices_subresource"})
      */
     private $chrono;
 
     /**
      * Undocumented function
-     * @Groups({"invoice_read"})
+     * @Groups({"invoice_read",  "invoices_subresource"})
      * @return User
      */
     public function getUser(): User{

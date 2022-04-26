@@ -34,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                  "controller"="App\Controller\InvoiceIncrementController"
  *              }  
  *    },
- *    normalizationContext={"groups"={"invoice_read"}}
+ *    normalizationContext={"groups"={"invoice_read"}},
+ *    denormalizationContext={"disable_type_enforcement"="true"}
  * )
  * @ApiFilter(OrderFilter::class, properties={"amount", "sentAt"})
  */
@@ -52,7 +53,7 @@ class Invoice
      * @ORM\Column(type="float")
      * @Groups({"invoice_read", "customers_read", "invoices_subresource"})
      * @Assert\NotBlank(message="Amount is obligator")
-     * @Assert\Type("numeric")
+     * @Assert\Type(type="numeric", message="should be of type numeric")
      */
     private $amount;
 

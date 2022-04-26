@@ -4,13 +4,30 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CustomerRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
- * @ApiResource
+ * @ApiResource(
+ *          collectionOperations={"GET", "POST"},
+ *          itemOperations={"GET", "PUT", "DELETE"},
+ *          subresourceOperations={
+ *                          "invoices_get_subresource" = {"path"="customers/{id}/invoices"}
+ *          },
+ *          normalizationContext={
+ *                          "groups"={"customers_read"}
+ *          }
+ *         
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"firstname":"ipartial", "lastname"})
+ * @ApiFilter(OrderFilter::class)
  */
 class Customer
 {
@@ -18,42 +35,76 @@ class Customer
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"customers_read", "invoice_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoice_read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoice_read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoice_read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoice_read"})
      */
     private $company;
 
     /**
      * @ORM\OneToMany(targetEntity=Invoice::class, mappedBy="customer")
+     * @Groups({"customers_read"})
+     * @ApiSubresource()
      */
     private $invoices;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
+     * @Groups({"customers_read"})
      */
     private $userUp;
 
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
+    }
+
+     /**
+     * Undocumented function
+     * @Groups({"customers_read"})
+     * @return float
+     */
+    public function getTotalAmount(): float{
+        return
+                array_reduce($this->invoices->toArray(), function($total, $invoice){
+                        return $total + $invoice->getAmount();
+                }, 0);
+    }
+
+    /**
+     * Undocumented function
+     * @Groups({"customers_read"})
+     * @return float
+     */
+    public function getUnAmount(): float{
+        return
+                array_reduce($this->invoices->toArray(), function($total, $invoice){
+                        return $total + ($invoice->getStatus() == "PAID" || 
+                                                    $invoice->getStatus() == "CANCELLED" 
+                                                    ? 0  : $invoice->getAmount() );
+                }, 0);
     }
 
     public function getId(): ?int

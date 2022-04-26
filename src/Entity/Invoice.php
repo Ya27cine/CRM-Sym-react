@@ -20,9 +20,17 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *    subresourceOperations={
  *              "api_customers_invoices_get_subresource" = { 
  *                              "normalization_context" = { 
- *                                                              "groups" = { "invoices_subresource"}
+ *                                                   "groups" = { "invoices_subresource"}
  *                                }
  *              }
+ *    },
+ *    itemOperations={
+ *            "GET", "DELETE", "PUT",
+ *              "Increment"={
+ *                                  "method"="POST",
+ *                                  "path"="/invoices/{id}/increment",
+ *                                  "controller"="App\Controller\InvoiceIncrementController"
+ *              }  
  *    },
  *    normalizationContext={"groups"={"invoice_read"}}
  * )

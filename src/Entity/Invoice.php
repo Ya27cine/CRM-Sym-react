@@ -85,7 +85,7 @@ class Invoice
      * @ORM\Column(type="integer")
      * @Groups({"invoice_read", "customers_read",  "invoices_subresource"})
      * @Assert\NotBlank(message="Chrono is obligator")
-     * @Assert\Type("integer")
+     * @Assert\Type(type="numeric", message="should be numeric")
      */
     private $chrono;
 
@@ -156,7 +156,7 @@ class Invoice
         return $this->chrono;
     }
 
-    public function setChrono(int $chrono): self
+    public function setChrono($chrono): self
     {
         $this->chrono = $chrono;
 

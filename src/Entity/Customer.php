@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -41,6 +42,8 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="firstname is obligator")
+     * @Assert\Length(min=4, max=255, minMessage="has 4 character MIN")
      * @Groups({"customers_read", "invoice_read"})
      */
     private $firstname;
@@ -48,12 +51,16 @@ class Customer
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoice_read"})
+     * @Assert\NotBlank(message="lastname is obligator")
+     * @Assert\Length(min=4, max=255, minMessage="has 4 character MIN")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoice_read"})
+     * @Assert\NotBlank(message="email is obligator")
+     * @Assert\Email(message="format is not valid")
      */
     private $email;
 
@@ -73,6 +80,7 @@ class Customer
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @Groups({"customers_read"})
+     * @Assert\NotBlank(message="User Up is obligator")
      */
     private $userUp;
 

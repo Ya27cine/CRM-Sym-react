@@ -61,7 +61,7 @@ class Invoice
      * @ORM\Column(type="datetime")
      * @Groups({"invoice_read", "customers_read",  "invoices_subresource"})
      * @Assert\NotBlank(message="Sent_At  is obligator")
-     * @Assert\DateTime("format YYYY-MM-DD")
+     * @Assert\DateTime(message="format YYYY-MM-DD")
      */
     private $sentAt;
 
@@ -120,7 +120,7 @@ class Invoice
         return $this->sentAt;
     }
 
-    public function setSentAt(\DateTimeInterface $sentAt): self
+    public function setSentAt($sentAt): self
     {
         $this->sentAt = $sentAt;
 

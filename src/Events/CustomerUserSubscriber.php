@@ -21,7 +21,7 @@ class CustomerUserSubscriber implements EventSubscriberInterface{
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ["putUserInCustomer", EventPriorities::PRE_VALIDATE]
+            KernelEvents::VIEW => ["setUserForCustomer", EventPriorities::PRE_VALIDATE]
         ];
     }
 

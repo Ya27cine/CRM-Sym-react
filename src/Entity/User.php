@@ -16,7 +16,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
- * @ApiResource
+ * @ApiResource(
+ *      normalizationContext={
+ *                  "groups"={"users_read"}
+ *      }
+ *)
  */
 class User implements UserInterface
 {
@@ -30,7 +34,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"customers_read", "invoice_read",  "invoices_subresource"})
+     * @Groups({"users_read","customers_read", "invoice_read",  "invoices_subresource"})
      * @Assert\NotBlank(message="Email is obligator")
      * @Assert\Email(message="format Email")
      */
@@ -50,7 +54,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoice_read",  "invoices_subresource"})
+     * @Groups({"users_read", "customers_read", "invoice_read",  "invoices_subresource"})
      * @Assert\NotBlank(message="Firstname is obligator")
      * @Assert\Length(min=3, max=255, minMessage="min 3, max 255 caracter")
      */
@@ -58,7 +62,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoice_read",  "invoices_subresource"})
+     * @Groups({"users_read", "customers_read", "invoice_read",  "invoices_subresource"})
      * @Assert\NotBlank(message="Lastname is obligator")
      * @Assert\Length(min=3, max=255, minMessage="min 3, max 255 caracter")
      */

@@ -28,6 +28,14 @@ services:
 
     App\Serializer\PatchedDateTimeNormalizer:
         tags: [serializer.normalizer]
+    # enrish the JWT object when it is created
+    App\Events\JwtCreatedSubscriber:
+        tags:
+            - { 
+                name: kernel.event_listener, 
+                event: lexik_jwt_authentication.on_jwt_created,
+                method: onCreated
+            }
 
 
     # add more service definitions when explicit configuration is needed

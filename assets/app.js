@@ -1,8 +1,20 @@
 
-import React from 'react'
-import ReactDom from 'react-dom'
+import React from 'react';
+import ReactDom from 'react-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+
+import './styles/app.css';
+
 const App = () =>{
-    return <h1>Hello, everybody !</h1>;
+    return (
+    <div>
+        <Navbar />
+        <div class="container pt-5">
+          <Home/>
+        </div>
+    </div>
+    );
 }
 
 const el = document.querySelector('#app');

@@ -8,7 +8,10 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
-// start the Stimulus application
-import './bootstrap';
+const x = (m) =>  m+1
 
-console.log("Hello World ")
+console.log("Hello World "+x(99));
+
+const el = document.querySelectorAll('#app');
+console.log( el);
+

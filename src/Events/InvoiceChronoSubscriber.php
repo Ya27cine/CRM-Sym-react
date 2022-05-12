@@ -42,6 +42,7 @@ class InvoiceChronoSubscriber implements EventSubscriberInterface{
           //  dd($value);
             $invoice->setChrono($value);
 
+            // TDOO: 
             if($invoice->getSentAt() == null)
                 $invoice->setSentAt(new \DateTime());
         } 

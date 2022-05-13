@@ -1,9 +1,27 @@
 import React , {useEffect, useState} from 'react'
 import axios from "axios"
+import Pagination from '../components/Pagination'
 
 const Customer = () => {
 
     const [ customers, setCustomers] =  useState([])
+    const [ currentPage, setCurrentPage] =  useState(1)
+
+
+    //--------- pagination 
+    let countItmes = 10;
+    let paginationCustomers = Pagination.sliceData(
+        customers,
+        {
+            page: currentPage,
+            limit: countItmes
+        }
+    );
+    //----------------------
+    const handlPageChange = (page) => {
+        setCurrentPage( page )
+    }
+
     useEffect(() => {
          axios.get("http://localhost:8000/api/customers")
          .then( (res)   => res.data['hydra:member']
@@ -12,13 +30,15 @@ const Customer = () => {
     }, [])
 
     const onDelete = (id) => {
+        //Deletion: the optimistic approach and the pessimistic approach
         const customers_before = customers;
-        // optimiste
+        // the optimistic approach 
         setCustomers(
             customers.filter( (item) => item.id != id)
         )
         axios.delete("/api/customers/"+id)
         .then( (res) => {
+            // the pessimistic approach
             console.log("clicked handl delete !"+id, res)
         }).catch( (er)  => {
             setCustomers( customers_before )
@@ -43,7 +63,7 @@ const Customer = () => {
                 </tr>
             </thead>
             <tbody>
-                { customers.map( (customer) => 
+                { paginationCustomers.map( (customer) => 
                     <tr key={customer.id}>
                         <th scope="row"> {customer.id} </th>
                         <td> <a href="#"> {customer.lastname} {customer.firstname}</a> </td>
@@ -66,6 +86,13 @@ const Customer = () => {
                 
             </tbody>
         </table>
+
+        <Pagination 
+            currentPage={currentPage}  
+            length={customers.length}
+            countItmes={countItmes}
+            onHandlPageChange={handlPageChange}
+        /> 
     </>
     );
 }

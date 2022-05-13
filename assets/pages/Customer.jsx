@@ -1,8 +1,52 @@
-import React from 'react'
-
+import React , {useEffect, useState} from 'react'
+import axios from "axios"
 
 const Customer = () => {
-    return ( <h1>Customer list</h1> );
+
+    const [ customers, setCustomers] =  useState([])
+    useEffect(() => {
+         axios.get("http://localhost:8000/api/customers")
+         .then( (res)   => res.data['hydra:member']
+         ).then((data) =>  setCustomers( data ) 
+         ).catch( (er)  => console.error(er) )
+    }, [])
+
+    return( 
+     <>
+     <h1>Customer list</h1>
+         <table className="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col">ID.</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Email</th>
+                <th scope="col">Company</th>
+                <th scope="col">Invoices</th>
+                <th scope="col">Amount</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                { customers.map( (customer) => 
+                    <tr key={customer.id}>
+                        <th scope="row"> {customer.id} </th>
+                        <td> <a href="#"> {customer.lastname} {customer.firstname}</a> </td>
+                        <td> {customer.email} </td>
+                        <td>{customer.company}</td>
+                        <td> {customer.invoices.length} </td>
+                        <td> {customer.totalAmount.toLocaleString()}</td>
+                        <td>
+                            <button className="btn btn-sm btn-primary mx-2">Edit</button>
+                            <button className="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                  )
+                }
+                
+            </tbody>
+        </table>
+    </>
+    );
 }
  
 export default Customer;

@@ -9,19 +9,22 @@ const CustomerPagination = () => {
     const [ customers, setCustomers] =  useState([])
     const [ currentPage, setCurrentPage] =  useState(1)
     const [ totalItems, setTotalItems] =  useState(0)
+    const [ search, setSearch] =  useState('')
+
 
     const handlPageChange = (page) => {
         setCurrentPage( page )
     }
 
     useEffect(() => {
-         axios.get("http://localhost:8000/api/customers?pagination=true&count="+countItmes+"&page="+currentPage)
+        axios
+         .get("http://localhost:8000/api/customers?pagination=true&count="+countItmes+"&page="+currentPage+"&firstname="+search)
          .then( (res)   => {
              setCustomers( res.data['hydra:member'] )
              setTotalItems( res.data['hydra:totalItems'] );
          })
          .catch( (er)  => console.error(er) )
-    }, [currentPage])
+    }, [currentPage, search])
 
 
     const onDelete = (id) => {
@@ -41,10 +44,25 @@ const CustomerPagination = () => {
         })
     }
 
+    const handlSearch = (e) => {
+        setSearch( e.currentTarget.value)
+        setCurrentPage( 1 )
+    }
 
     return( 
      <>
-     <h1>Customer list {Pagination}</h1>
+     <h1>Customer list </h1>
+
+        <div className="form-group">
+            <input  className="form-control" 
+                value={search}
+                onChange={handlSearch}
+                type="text" 
+                name="search" 
+                id="search"  
+                placeholder="Search ... {firstame}" />
+        </div>
+
          <table className="table table-hover">
             <thead>
                 <tr>
@@ -82,12 +100,14 @@ const CustomerPagination = () => {
             </tbody>
         </table>
 
-        <Pagination 
-            currentPage={currentPage}  
-            length={totalItems}
-            countItmes={countItmes}
-            onHandlPageChange={handlPageChange}
-        /> 
+        {totalItems > countItmes 
+         && <Pagination 
+                currentPage={currentPage}  
+                length={totalItems}
+                countItmes={countItmes}
+                onHandlPageChange={handlPageChange}
+        /> }
+       
     </>
     );
 }

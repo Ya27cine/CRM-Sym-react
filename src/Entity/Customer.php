@@ -30,7 +30,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *         
  * )
- * @ApiFilter(SearchFilter::class, properties={"firstname":"ipartial", "lastname"})
+ * @ApiFilter(SearchFilter::class, 
+ *      properties={
+ *              "firstname":"ipartial", 
+ *              "lastname" : "ipartial",
+ *              "email": "ipartial"
+ *      })
  * @ApiFilter(OrderFilter::class)
  */
 class Customer

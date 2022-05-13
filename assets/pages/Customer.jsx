@@ -12,12 +12,18 @@ const Customer = () => {
     }, [])
 
     const onDelete = (id) => {
+        const customers_before = customers;
+        // optimiste
+        setCustomers(
+            customers.filter( (item) => item.id != id)
+        )
         axios.delete("/api/customers/"+id)
         .then( (res) => {
-            setCustomers(
-                customers.filter( (item) => item.id != id))
             console.log("clicked handl delete !"+id, res)
-        }).catch( (er)  => console.error(er) )
+        }).catch( (er)  => {
+            setCustomers( customers_before )
+            console.error(er) 
+        })
     }
 
 

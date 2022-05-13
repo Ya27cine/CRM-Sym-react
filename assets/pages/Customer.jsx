@@ -11,6 +11,16 @@ const Customer = () => {
          ).catch( (er)  => console.error(er) )
     }, [])
 
+    const onDelete = (id) => {
+        axios.delete("/api/customers/"+id)
+        .then( (res) => {
+            setCustomers(
+                customers.filter( (item) => item.id != id))
+            console.log("clicked handl delete !"+id, res)
+        }).catch( (er)  => console.error(er) )
+    }
+
+
     return( 
      <>
      <h1>Customer list</h1>
@@ -37,7 +47,12 @@ const Customer = () => {
                         <td> {customer.totalAmount.toLocaleString()}</td>
                         <td>
                             <button className="btn btn-sm btn-primary mx-2">Edit</button>
-                            <button className="btn btn-sm btn-danger">Delete</button>
+                            <button 
+                            disabled={ customer.invoices.length > 0}
+                            onClick={() =>onDelete(customer.id)} 
+                            className="btn btn-sm btn-danger">
+                                Delete
+                            </button>
                         </td>
                     </tr>
                   )

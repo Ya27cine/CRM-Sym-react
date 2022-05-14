@@ -25,16 +25,18 @@ const CustomerPagination = () => {
      const handlPageChange = page => setCurrentPage( page )
 
     // delete one customer
-    const onDelete = (id) => {
+    const onDelete = async (id) => {
         //Deletion: the optimistic approach and the pessimistic approach
-        const customers_before = customers;
+        const customers_before = [...customers];
         setCustomers( customers.filter( item => item.id != id) )
-        CustomerApi.delete(id)
-        .then( res => console.log("clicked handl delete !"+id, res))
-        .catch( er  => {
+        try 
+        {
+            let res = await CustomerApi.delete(id)
+            console.log("clicked handl delete !"+id, res)
+        } catch (er) {
             setCustomers( customers_before )
             console.error(er) 
-        })
+        }
     }
     // search with fied: firstname 
     const handlSearch = ({currentTarget}) => {

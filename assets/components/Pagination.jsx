@@ -1,10 +1,5 @@
 import React from 'react'
 
-{/* <Pagination 
-            currentPage={currentPage}  
-            onHandlPageChange={handlPageChange}
-        />  */}
-
 const Pagination = ({currentPage, length, countItmes, onHandlPageChange}) => {
 
     let pages = [];
@@ -31,7 +26,7 @@ const Pagination = ({currentPage, length, countItmes, onHandlPageChange}) => {
                     </li>
                 )}
                 
-                <li className={"page-item "+ ( currentPage == countPages-1 && "disabled") }>
+                <li className={"page-item "+ ( currentPage == countPages && "disabled") }>
                 <button className="page-link" onClick={() => onHandlPageChange(currentPage+1)}>
                     &raquo;</button>
                 </li>

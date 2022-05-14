@@ -1,51 +1,44 @@
 import React , {useEffect, useState} from 'react'
 import axios from "axios"
 import Pagination from '../components/Pagination'
+import CustomerApi from '../services/CustomerApi'
 
 const CustomerPagination = () => {
-
-    let countItmes = 10;
 
     const [ customers, setCustomers] =  useState([])
     const [ currentPage, setCurrentPage] =  useState(1)
     const [ totalItems, setTotalItems] =  useState(0)
     const [ search, setSearch] =  useState('')
-
-
-    const handlPageChange = (page) => {
-        setCurrentPage( page )
-    }
-
+    // max shown customers
+    let countItmes = 10;
+    
     useEffect(() => {
-        axios
-         .get("http://localhost:8000/api/customers?pagination=true&count="+countItmes+"&page="+currentPage+"&firstname="+search)
-         .then( (res)   => {
-             setCustomers( res.data['hydra:member'] )
-             setTotalItems( res.data['hydra:totalItems'] );
-         })
-         .catch( (er)  => console.error(er) )
+        CustomerApi.findAll(countItmes, currentPage, search)
+        .then( (data) =>{
+            setCustomers( data.customers );
+            setTotalItems( data.totalItems );
+        }).catch( e=>console.log(e));
+       
     }, [currentPage, search])
 
+     // change current page when clicked on pagination
+     const handlPageChange = page => setCurrentPage( page )
 
+    // delete one customer
     const onDelete = (id) => {
         //Deletion: the optimistic approach and the pessimistic approach
         const customers_before = customers;
-        // the optimistic approach 
-        setCustomers(
-            customers.filter( (item) => item.id != id)
-        )
-        axios.delete("/api/customers/"+id)
-        .then( (res) => {
-            // the pessimistic approach
-            console.log("clicked handl delete !"+id, res)
-        }).catch( (er)  => {
+        setCustomers( customers.filter( item => item.id != id) )
+        CustomerApi.delete(id)
+        .then( res => console.log("clicked handl delete !"+id, res))
+        .catch( er  => {
             setCustomers( customers_before )
             console.error(er) 
         })
     }
-
-    const handlSearch = (e) => {
-        setSearch( e.currentTarget.value)
+    // search with fied: firstname 
+    const handlSearch = ({currentTarget}) => {
+        setSearch( currentTarget.value)
         setCurrentPage( 1 )
     }
 

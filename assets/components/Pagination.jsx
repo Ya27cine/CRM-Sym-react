@@ -8,7 +8,6 @@ const Pagination = ({currentPage, length, countItems, onHandlePageChange}) => {
         pages.push( index);
     }
 
-    console.log(" costumer length : "+length);
     return (
         <div>
             <ul className="pagination pagination-lg mt-4">

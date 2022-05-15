@@ -1,9 +1,8 @@
-import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import moment from 'moment';
 import Currencies from './../services/Currencies'
 import Pagination from '../components/Pagination';
-
+import InvoiceApi from '../services/InvoiceApi';
 
 const InvoicePagination = () => {
 
@@ -11,7 +10,6 @@ const InvoicePagination = () => {
     const [ currentPage, setCurrentPage] =  useState(1)
     const [ totalItems, setTotalItems] =  useState(0)
     const [ search, setSearch] =  useState('')
-
 
      // max shown customers
      let countItems = 37;
@@ -26,14 +24,13 @@ const InvoicePagination = () => {
     const handlePageChange = page => setCurrentPage( page )
 
     useEffect(() => {   
-        axios
-            .get("http://localhost:8000/api/invoices?pagination=true&count="+countItems+"&page="+currentPage+"&status="+search)
+         InvoiceApi.findAll(countItems, currentPage, search)
                 .then( (res) =>  {
                     setInvoices(   res.data['hydra:member']) 
                     setTotalItems( res.data['hydra:totalItems'])
                 })
                 .catch( (error) => console.log(console.error() ))   
-    }, [invoices])
+    }, [invoices, search])
 
      // search with field: status { paid, sent..} 
      const handleSearch = ({currentTarget}) => {
@@ -78,15 +75,13 @@ const InvoicePagination = () => {
                         </span>
                     </td>
                     <td>{invoice.amount.toLocaleString()}  {Currencies.currency()}</td>
-                    <td>
-                    <td>
+                    <td>               
                         <button className="btn btn-sm btn-primary mx-2">Edit</button>
                         <button 
                         disabled={ invoice.status !== "CANCELLED"}
                         className="btn btn-sm btn-danger">
                             Archived
                         </button>
-                        </td>
                     </td>
                 </tr>
             )}

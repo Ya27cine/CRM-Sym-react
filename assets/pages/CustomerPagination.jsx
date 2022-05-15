@@ -1,5 +1,4 @@
-import React , {useEffect, useState} from 'react'
-import axios from "axios"
+import React, { useEffect, useState } from 'react'
 import Pagination from '../components/Pagination'
 import CustomerApi from '../services/CustomerApi'
 
@@ -10,10 +9,10 @@ const CustomerPagination = () => {
     const [ totalItems, setTotalItems] =  useState(0)
     const [ search, setSearch] =  useState('')
     // max shown customers
-    let countItmes = 10;
+    let countItems = 10;
     
     useEffect(() => {
-        CustomerApi.findAll(countItmes, currentPage, search)
+        CustomerApi.findAll(countItems, currentPage, search)
         .then( (data) =>{
             setCustomers( data.customers );
             setTotalItems( data.totalItems );
@@ -22,7 +21,7 @@ const CustomerPagination = () => {
     }, [currentPage, search])
 
      // change current page when clicked on pagination
-     const handlPageChange = page => setCurrentPage( page )
+     const handlePageChange = page => setCurrentPage( page )
 
     // delete one customer
     const onDelete = async (id) => {
@@ -32,14 +31,14 @@ const CustomerPagination = () => {
         try 
         {
             let res = await CustomerApi.delete(id)
-            console.log("clicked handl delete !"+id, res)
+            console.log("clicked handle delete !"+id, res)
         } catch (er) {
             setCustomers( customers_before )
             console.error(er) 
         }
     }
-    // search with fied: firstname 
-    const handlSearch = ({currentTarget}) => {
+    // search with field: first-name 
+    const handleSearch = ({currentTarget}) => {
         setSearch( currentTarget.value)
         setCurrentPage( 1 )
     }
@@ -51,11 +50,11 @@ const CustomerPagination = () => {
         <div className="form-group">
             <input  className="form-control" 
                 value={search}
-                onChange={handlSearch}
+                onChange={handleSearch}
                 type="text" 
                 name="search" 
                 id="search"  
-                placeholder="Search ... {firstame}" />
+                placeholder="Search ... {first-name}" />
         </div>
 
          <table className="table table-hover">
@@ -95,12 +94,12 @@ const CustomerPagination = () => {
             </tbody>
         </table>
 
-        {totalItems > countItmes 
+        {totalItems > countItems 
          && <Pagination 
                 currentPage={currentPage}  
                 length={totalItems}
-                countItmes={countItmes}
-                onHandlPageChange={handlPageChange}
+                countItems={countItems}
+                onHandlePageChange={handlePageChange}
         /> }
        
     </>

@@ -1,33 +1,33 @@
 import React from 'react'
 
-const Pagination = ({currentPage, length, countItmes, onHandlPageChange}) => {
+const Pagination = ({currentPage, length, countItems, onHandlePageChange}) => {
 
     let pages = [];
-    let countPages =  Math.ceil( length / countItmes );
+    let countPages =  Math.ceil( length / countItems );
     for (let index = 1; index <= countPages; index++) {
         pages.push( index);
     }
 
-    console.log(" costomer length : "+length);
+    console.log(" costumer length : "+length);
     return (
         <div>
             <ul className="pagination pagination-lg mt-4">
                 <li className={"page-item "+ ( currentPage == 1 && "disabled") }>
-                <button className="page-link"  onClick={() => onHandlPageChange(currentPage-1)}>
+                <button className="page-link"  onClick={() => onHandlePageChange(currentPage-1)}>
                     &laquo;</button>
                 </li>
 
                 { pages.map( (page) => 
                     <li key={page} className={"page-item" + (page === currentPage && " active") }>
                     <button className="page-link"
-                        onClick={() => onHandlPageChange(page)}>
+                        onClick={() => onHandlePageChange(page)}>
                         {page}
                     </button>
                     </li>
                 )}
                 
                 <li className={"page-item "+ ( currentPage == countPages && "disabled") }>
-                <button className="page-link" onClick={() => onHandlPageChange(currentPage+1)}>
+                <button className="page-link" onClick={() => onHandlePageChange(currentPage+1)}>
                     &raquo;</button>
                 </li>
             </ul>

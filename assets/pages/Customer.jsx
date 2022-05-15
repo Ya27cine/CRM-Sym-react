@@ -90,8 +90,8 @@ const Customer = () => {
         <Pagination 
             currentPage={currentPage}  
             length={customers.length}
-            countItmes={countItmes}
-            onHandlPageChange={handlPageChange}
+            countItems={countItmes}
+            onHandlePageChange={handlPageChange}
         /> 
     </>
     );

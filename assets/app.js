@@ -1,14 +1,14 @@
 
 import React from 'react';
 import ReactDom from 'react-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Customer from './pages/Customer';
 import CustomerPagination from './pages/CustomerPagination';
-
-import { HashRouter, Switch , Route} from 'react-router-dom';
-
+import Home from './pages/Home';
+import InvoicePagination from './pages/InvoicePagination';
 import './styles/app.css';
+
+
 
 const App = () =>{
     return (
@@ -17,6 +17,7 @@ const App = () =>{
         <main className="container pt-5">
            <Switch>
              <Route path="/customers" component={CustomerPagination} />
+             <Route path="/invoices" component={InvoicePagination} />
              <Route path="/" component={Home} />
            </Switch>
         </main>

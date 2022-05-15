@@ -2,10 +2,19 @@ import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import moment from 'moment';
 import Currencies from './../services/Currencies'
+import Pagination from '../components/Pagination';
+
 
 const InvoicePagination = () => {
 
     const [invoices, setInvoices] = useState([])
+    const [ currentPage, setCurrentPage] =  useState(1)
+    const [ totalItems, setTotalItems] =  useState(0)
+    const [ search, setSearch] =  useState('')
+
+
+     // max shown customers
+     let countItems = 37;
 
     const Status_CLasses = {
         'CANCELLED': 'warning',
@@ -13,14 +22,37 @@ const InvoicePagination = () => {
         'PAID': 'success',
     }
 
+    // change current page when clicked on pagination
+    const handlePageChange = page => setCurrentPage( page )
+
     useEffect(() => {   
         axios
-            .get("http://localhost:8000/api/invoices")
-                .then( (res) =>  setInvoices( res.data['hydra:member']) )
+            .get("http://localhost:8000/api/invoices?pagination=true&count="+countItems+"&page="+currentPage+"&status="+search)
+                .then( (res) =>  {
+                    setInvoices(   res.data['hydra:member']) 
+                    setTotalItems( res.data['hydra:totalItems'])
+                })
                 .catch( (error) => console.log(console.error() ))   
     }, [invoices])
 
+     // search with field: status { paid, sent..} 
+     const handleSearch = ({currentTarget}) => {
+        setSearch( currentTarget.value)
+        setCurrentPage( 1 )
+    }
+
     return (<> 
+     <h1>Invoices list </h1>
+
+    <div className="form-group">
+            <input  className="form-control" 
+                value={search}
+                onChange={handleSearch}
+                type="text" 
+                name="search" 
+                id="search"  
+                placeholder="Search ... {state}" />
+    </div>
     <table className="table table-hover">
         <thead>
             <tr>
@@ -61,6 +93,16 @@ const InvoicePagination = () => {
            
         </tbody>
     </table>
+    {
+        totalItems>countItems
+         && 
+        <Pagination 
+            currentPage={currentPage}  
+            length={totalItems}
+            countItems={countItems}
+            onHandlePageChange={handlePageChange}
+        /> 
+    } 
     </>);
 }
  

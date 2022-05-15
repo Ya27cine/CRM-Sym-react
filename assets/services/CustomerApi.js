@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const findAll = async (countItmes, currentPage, search) => {
+const findAll = async (countItems, currentPage, search) => {
     let data;
     await axios
-    .get("http://localhost:8000/api/customers?pagination=true&count="+countItmes+"&page="+currentPage+"&firstname="+search)
+    .get("http://localhost:8000/api/customers?pagination=true&count="+countItems+"&page="+currentPage+"&firstname="+search)
     .then( (res)   => 
         {
             data = {

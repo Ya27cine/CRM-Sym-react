@@ -8,8 +8,9 @@ use App\Repository\InvoiceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 
 /**
@@ -38,6 +39,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *    denormalizationContext={"disable_type_enforcement"="true"}
  * )
  * @ApiFilter(OrderFilter::class, properties={"amount", "sentAt"})
+ * @ApiFilter(SearchFilter::class, 
+ *      properties={
+ *              "status":"ipartial", 
+ *      })
  */
 class Invoice
 {

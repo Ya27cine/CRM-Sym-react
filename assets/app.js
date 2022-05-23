@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import CustomerPagination from './pages/CustomerPagination';
 import Home from './pages/Home';
 import InvoicePagination from './pages/InvoicePagination';
+import Login from './pages/security/Login';
 import './styles/app.css';
 
 
@@ -18,6 +19,7 @@ const App = () =>{
            <Switch>
              <Route path="/customers" component={CustomerPagination} />
              <Route path="/invoices" component={InvoicePagination} />
+             <Route path="/login" component={Login} />
              <Route path="/" component={Home} />
            </Switch>
         </main>

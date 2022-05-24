@@ -17,7 +17,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            AuthApi.authentication( credentials )
+            AuthApi.authenticate( credentials )
             setErrors('')
         } catch (error) {
             setErrors(errors.response.message)

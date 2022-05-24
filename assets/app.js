@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDom from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
@@ -8,7 +7,6 @@ import Home from './pages/Home';
 import InvoicePagination from './pages/InvoicePagination';
 import Login from './pages/security/Login';
 import './styles/app.css';
-
 
 
 const App = () =>{

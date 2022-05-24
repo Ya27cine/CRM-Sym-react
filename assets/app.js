@@ -10,14 +10,14 @@ import AuthApi from './services/AuthApi';
 import './styles/app.css';
 
 
-AuthApi.setup();
 
 const App = () =>{
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AuthApi.setup()
+  )
 
-
-    return (
+  return (
     <HashRouter>
         <Navbar  onLogout={setIsAuthenticated}  isAuthenticated={isAuthenticated} />
         <main className="container pt-5">

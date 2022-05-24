@@ -11,6 +11,7 @@ const Pagination = ({currentPage, length, countItems, onHandlePageChange}) => {
     return (
         <div>
             <ul className="pagination pagination-lg mt-4">
+
                 <li className={"page-item "+ ( currentPage == 1 && "disabled") }>
                 <button className="page-link"  onClick={() => onHandlePageChange(currentPage-1)}>
                     &laquo;</button>

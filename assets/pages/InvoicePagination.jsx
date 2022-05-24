@@ -12,7 +12,7 @@ const InvoicePagination = () => {
     const [ search, setSearch] =  useState('')
 
      // max shown customers
-     let countItems = 37;
+     let countItems = 17;
 
     const Status_CLasses = {
         'CANCELLED': 'warning',

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import axios from 'axios';
-import CustomerApi from '../../services/CustomerApi';
+import AuthApi from '../../services/AuthApi';
 
 const Login = () => {
 
@@ -10,25 +9,19 @@ const Login = () => {
     })
     const [errors, setErrors] = useState('')
 
-    const handleChange =  (e) => {
-        let name = e.currentTarget.name
-        let value = e.currentTarget.value
+    const handleChange =  ( {currentTarget} ) => {
+        let {name, value} = currentTarget
         setCredentials({ ...credentials, [name]: value})
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token =
-            await axios.
-                post("http://localhost:8000/api/login_check", credentials)
-                .then(  (rep)  => rep.data.token ) // return token 
-                .catch( (err)  =>{
-                    console.log(err.response) 
-                    setErrors(err.response.data.message)
-                })
-        setErrors('')
-        window.localStorage.setItem("auth", token)
-        axios.defaults.headers["Authorization"] = "Bearer " + token;
+        try {
+            AuthApi.authentication( credentials )
+            setErrors('')
+        } catch (error) {
+            setErrors(errors.response.message)
+        } 
     }
 
     return ( 

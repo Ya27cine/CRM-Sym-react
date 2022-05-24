@@ -1,6 +1,6 @@
 import React ,{useState} from 'react';
 import ReactDom from 'react-dom';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CustomerPagination from './pages/CustomerPagination';
 import Home from './pages/Home';
@@ -13,20 +13,23 @@ import './styles/app.css';
 
 const App = () =>{
 
+  // Transform NavBar component to NavbarWithRouter for has  'history' attribute.
+  const NavbarWithRouter  = withRouter( Navbar ) 
+
   const [isAuthenticated, setIsAuthenticated] = useState(
     AuthApi.setup()
   )
 
   return (
     <HashRouter>
-        <Navbar  onLogout={setIsAuthenticated}  isAuthenticated={isAuthenticated} />
+        <NavbarWithRouter  onLogout={setIsAuthenticated}  isAuthenticated={isAuthenticated} />
         <main className="container pt-5">
            <Switch>
              <Route path="/customers" component={CustomerPagination} />
              <Route path="/invoices" component={InvoicePagination} />
 
              <Route path="/login" 
-                render={ (props) => <Login onLogin={setIsAuthenticated}  />  } 
+                render={ (props) => <Login onLogin={setIsAuthenticated}  {...props} />  } 
              />
 
              <Route path="/" component={Home} />

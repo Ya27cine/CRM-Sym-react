@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import AuthApi from '../../services/AuthApi';
 
-const Login = ({onLogin}) => {
+const Login = ({onLogin, history}) => {
 
     const [credentials, setCredentials] = useState({
         username: '',
@@ -14,12 +14,16 @@ const Login = ({onLogin}) => {
         setCredentials({ ...credentials, [name]: value})
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async e => {
         e.preventDefault();
         try {
-            AuthApi.authenticate( credentials )
+            await AuthApi.authenticate(credentials);
             onLogin(true)
             setErrors('')
+            // redirection   
+            history.replace("/customers") 
+            
+
         } catch (error) {
             setErrors(errors.response.message)
         } 

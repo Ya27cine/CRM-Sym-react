@@ -30,7 +30,7 @@ const InvoicePagination = () => {
                     setTotalItems( res.data['hydra:totalItems'])
                 })
                 .catch( (error) => console.log(console.error() ))   
-    }, [invoices, search])
+    }, [currentPage, search])
 
      // search with field: status { paid, sent..} 
      const handleSearch = ({currentTarget}) => {

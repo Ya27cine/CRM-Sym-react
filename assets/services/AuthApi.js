@@ -28,8 +28,8 @@ function logout(){
     delete axios.defaults.headers["Authorization"];
 }
 
-function authenticate(credentials){
-     axios.
+async function authenticate(credentials){
+    await axios.
         post("http://localhost:8000/api/login_check", credentials)
         .then( response => response.data.token )
         .then( token => {

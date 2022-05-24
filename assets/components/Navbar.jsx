@@ -2,10 +2,11 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 import AuthApi from '../services/AuthApi';
 
-const Navbar = () => {
+const Navbar = ({isAuthenticated, onLogout}) => {
 
   const handleLogout = () => {
     AuthApi.logout()
+    onLogout( false )
   }
 
   return ( 
@@ -26,18 +27,27 @@ const Navbar = () => {
                 </li>
               </ul>
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/">Register</NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="btn btn-success" to="/login">Login</NavLink>
-                </li>
-                <li className="nav-item">
-                  <button 
-                    className="btn btn-danger"
-                    onClick={handleLogout} 
-                  >Logout</button>
-                </li>
+               
+               { ( ! isAuthenticated 
+                  &&
+                  <>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/">Register</NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink className="btn btn-success" to="/login">Login</NavLink>
+                      </li>
+                  </>
+                  ||
+                  <>
+                   <li className="nav-item">
+                      <button 
+                        className="btn btn-danger"
+                        onClick={handleLogout} 
+                      >Logout</button>
+                   </li>
+                  </>    
+                )}                                       
               </ul>
             </div>
           </div>

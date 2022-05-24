@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import AuthApi from '../../services/AuthApi';
 
-const Login = () => {
+const Login = ({onLogin}) => {
 
     const [credentials, setCredentials] = useState({
         username: '',
@@ -18,6 +18,7 @@ const Login = () => {
         e.preventDefault();
         try {
             AuthApi.authenticate( credentials )
+            onLogin(true)
             setErrors('')
         } catch (error) {
             setErrors(errors.response.message)

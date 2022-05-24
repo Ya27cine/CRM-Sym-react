@@ -6,8 +6,11 @@ import CustomerPagination from './pages/CustomerPagination';
 import Home from './pages/Home';
 import InvoicePagination from './pages/InvoicePagination';
 import Login from './pages/security/Login';
+import AuthApi from './services/AuthApi';
 import './styles/app.css';
 
+
+AuthApi.setup();
 
 const App = () =>{
     return (

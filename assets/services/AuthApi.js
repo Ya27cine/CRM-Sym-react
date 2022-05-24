@@ -1,4 +1,26 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+
+/**
+ * 
+ *  - Load the JWT as soon as the React app starts.
+ *  - Check token when  app is refreshed or started
+ */ 
+async function  setup(){
+    let token = window.localStorage.getItem("auth")
+    if( token ){
+        let { exp } =  await jwtDecode( token ); // get obj token:{ ..., exp: 1343433}
+        if( exp * 1000 >  new Date().getTime()){ // Check token 
+            setAxiosToken( token ) // Putting token
+            console.log(" login : done !")
+        }
+    }
+}
+
+
+function setAxiosToken(token){
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
+}
 
 function logout(){
     window.localStorage.removeItem("auth")
@@ -11,15 +33,13 @@ function authenticate(credentials){
         .then( response => response.data.token )
         .then( token => {
             window.localStorage.setItem("auth", token)
-            axios.defaults.headers["Authorization"] = "Bearer " + token;
+            setAxiosToken( token )
             return true;
         })
 }
 
 export default { 
     authenticate, 
-    logout 
+    logout,
+    setup,
 }
-
-
-

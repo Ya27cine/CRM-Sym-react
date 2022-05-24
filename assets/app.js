@@ -1,6 +1,6 @@
 import React ,{useState} from 'react';
 import ReactDom from 'react-dom';
-import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CustomerPagination from './pages/CustomerPagination';
 import Home from './pages/Home';
@@ -9,11 +9,15 @@ import Login from './pages/security/Login';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
 
-
-
+const PrivateRoute = ({path, component, isAuthenticated}) => {
+  return isAuthenticated 
+         ? <Route path={path} component={component} /> 
+         : <Redirect to="/login" /> 
+}
+ 
 const App = () =>{
 
-  // Transform NavBar component to NavbarWithRouter for has  'history' attribute.
+  // Transform NavBar component to NavbarWithRouter for has 'history' attribute.
   const NavbarWithRouter  = withRouter( Navbar ) 
 
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -25,13 +29,11 @@ const App = () =>{
         <NavbarWithRouter  onLogout={setIsAuthenticated}  isAuthenticated={isAuthenticated} />
         <main className="container pt-5">
            <Switch>
-             <Route path="/customers" component={CustomerPagination} />
-             <Route path="/invoices" component={InvoicePagination} />
-
-             <Route path="/login" 
-                render={ (props) => <Login onLogin={setIsAuthenticated}  {...props} />  } 
+            <PrivateRoute path="/customers" isAuthenticated={isAuthenticated} component={CustomerPagination} /> 
+            <PrivateRoute path="/invoices"  isAuthenticated={isAuthenticated} component={InvoicePagination}  /> 
+            <Route path="/login" 
+                render={ (props) => <Login onLogin={setIsAuthenticated}  {...props /** Pass history attr for redirect */} />  } 
              />
-
              <Route path="/" component={Home} />
            </Switch>
         </main>

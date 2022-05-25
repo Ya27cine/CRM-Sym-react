@@ -2,9 +2,8 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 /**
- * 
- *  - Load the JWT as soon as the React app starts.
- *  - Check token when  app is refreshed or started
+ *  Load the JWT as soon as the React app starts.
+ *  Check token when  app is refreshed or started
  */ 
 function setup(){
     let token = window.localStorage.getItem("auth")
@@ -17,22 +16,20 @@ function setup(){
     }
     return false;
 }
-
+/**
+ * Check token is valid.
+ * @return bool
+ */
 function isAuthenticated(){
-   return  setup(); //  true or false 
+   return  setup(); e
 }
 
-
-function setAxiosToken(token){
-    axios.defaults.headers["Authorization"] = "Bearer " + token;
-}
-
-function logout(){
-    window.localStorage.removeItem("auth")
-    delete axios.defaults.headers["Authorization"];
-}
-
-async function authenticate(credentials){
+/**
+ * HTTP request for authentication.
+ * Saving the token in LocalStorage and Axios.
+ * @param {object} credentials 
+ */
+ async function authenticate(credentials){
     await axios.
         post("http://localhost:8000/api/login_check", credentials)
         .then( response => response.data.token )
@@ -42,6 +39,19 @@ async function authenticate(credentials){
             return true;
         })
 }
+
+function setAxiosToken(token){
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
+}
+
+/**
+ * Delete the token from LocalStorage and Axios.
+ */
+function logout(){
+    window.localStorage.removeItem("auth")
+    delete axios.defaults.headers["Authorization"];
+}
+
 
 export default { 
     authenticate, 

@@ -16,7 +16,7 @@ import './styles/app.css';
 /** ===>  */  AuthApi.setup()
  
 const App = () =>{
-  // Transform NavBar component to NavbarWithRouter for has 'history' attribute.
+  // Transform NavBar component to NavbarWithRouter to have 'history' attribute.
   const NavbarWithRouter  = withRouter( Navbar ) 
 
   const [isAuthenticated, setIsAuthenticated] = useState( AuthApi.isAuthenticated() )

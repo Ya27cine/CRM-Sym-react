@@ -26,9 +26,9 @@ const Login = ({ history}) => {
             // redirection   
             history.replace("/customers") 
             
-
         } catch (error) {
-            setErrors(errors.response.message)
+           // console.log("error login",error)
+            setErrors("error bad credentials")
         } 
     }
 

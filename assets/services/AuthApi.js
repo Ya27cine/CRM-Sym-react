@@ -2,33 +2,35 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 /**
- * 
- *  - Load the JWT as soon as the React app starts.
- *  - Check token when  app is refreshed or started
+ *  Load the JWT as soon as the React app starts.
+ *  Check token when  app is refreshed or started
  */ 
-async function  setup(){
+function setup(){
     let token = window.localStorage.getItem("auth")
     if( token ){
-        let { exp } =  await jwtDecode( token ); // get obj token:{ ..., exp: 1343433}
+        let { exp } =  jwtDecode( token ); // get obj token:{ ..., exp: 1343433}
         if( exp * 1000 >  new Date().getTime()){ // Check token 
             setAxiosToken( token ) // Putting token
-            console.log(" login : done !")
+            return true;
         }
     }
+    return false;
+}
+/**
+ * Check token is valid.
+ * @return bool
+ */
+function isAuthenticated(){
+   return  setup(); e
 }
 
-
-function setAxiosToken(token){
-    axios.defaults.headers["Authorization"] = "Bearer " + token;
-}
-
-function logout(){
-    window.localStorage.removeItem("auth")
-    delete axios.defaults.headers["Authorization"];
-}
-
-function authenticate(credentials){
-     axios.
+/**
+ * HTTP request for authentication.
+ * Saving the token in LocalStorage and Axios.
+ * @param {object} credentials 
+ */
+ async function authenticate(credentials){
+    await axios.
         post("http://localhost:8000/api/login_check", credentials)
         .then( response => response.data.token )
         .then( token => {
@@ -38,8 +40,22 @@ function authenticate(credentials){
         })
 }
 
+function setAxiosToken(token){
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
+}
+
+/**
+ * Delete the token from LocalStorage and Axios.
+ */
+function logout(){
+    window.localStorage.removeItem("auth")
+    delete axios.defaults.headers["Authorization"];
+}
+
+
 export default { 
     authenticate, 
     logout,
     setup,
+    isAuthenticated,
 }

@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import AuthApi from '../../services/AuthApi';
+import AuthContext from '../../context/AuthContext';
 
-const Login = () => {
+const Login = ({ history}) => {
+
+    const {isAuthenticated, setIsAuthenticated } =  useContext(AuthContext)
 
     const [credentials, setCredentials] = useState({
         username: '',
@@ -14,11 +17,16 @@ const Login = () => {
         setCredentials({ ...credentials, [name]: value})
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async e => {
         e.preventDefault();
         try {
-            AuthApi.authenticate( credentials )
+            await AuthApi.authenticate(credentials);
+            setIsAuthenticated(true)
             setErrors('')
+            // redirection   
+            history.replace("/customers") 
+            
+
         } catch (error) {
             setErrors(errors.response.message)
         } 

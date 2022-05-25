@@ -6,16 +6,20 @@ import jwtDecode from "jwt-decode";
  *  - Load the JWT as soon as the React app starts.
  *  - Check token when  app is refreshed or started
  */ 
-async function  setup(){
+function setup(){
     let token = window.localStorage.getItem("auth")
     if( token ){
-        let { exp } =  await jwtDecode( token ); // get obj token:{ ..., exp: 1343433}
+        let { exp } =  jwtDecode( token ); // get obj token:{ ..., exp: 1343433}
         if( exp * 1000 >  new Date().getTime()){ // Check token 
             setAxiosToken( token ) // Putting token
             return true;
         }
     }
     return false;
+}
+
+function isAuthenticated(){
+   return  setup(); //  true or false 
 }
 
 
@@ -43,4 +47,5 @@ export default {
     authenticate, 
     logout,
     setup,
+    isAuthenticated,
 }

@@ -1,7 +1,9 @@
-import React ,{useState} from 'react';
+import React, { useState } from 'react';
 import ReactDom from 'react-dom';
-import { HashRouter, Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
+import AuthContext from './context/AuthContext';
 import CustomerPagination from './pages/CustomerPagination';
 import Home from './pages/Home';
 import InvoicePagination from './pages/InvoicePagination';
@@ -9,39 +11,33 @@ import Login from './pages/security/Login';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
 
-const PrivateRoute = ({path, component, isAuthenticated}) => {
-  return isAuthenticated 
-         ? <Route path={path} component={component} /> 
-         : <Redirect to="/login" /> 
-}
+
+// Load the JWT as soon as the React app starts
+/** ===>  */  AuthApi.setup()
  
 const App = () =>{
-
   // Transform NavBar component to NavbarWithRouter for has 'history' attribute.
   const NavbarWithRouter  = withRouter( Navbar ) 
 
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthApi.setup()
-  )
-
+  const [isAuthenticated, setIsAuthenticated] = useState( AuthApi.isAuthenticated() )
   return (
-    <HashRouter>
-        <NavbarWithRouter  onLogout={setIsAuthenticated}  isAuthenticated={isAuthenticated} />
-        <main className="container pt-5">
-           <Switch>
-            <PrivateRoute path="/customers" isAuthenticated={isAuthenticated} component={CustomerPagination} /> 
-            <PrivateRoute path="/invoices"  isAuthenticated={isAuthenticated} component={InvoicePagination}  /> 
-            <Route path="/login" 
-                render={ (props) => <Login onLogin={setIsAuthenticated}  {...props /** Pass history attr for redirect */} />  } 
-             />
-             <Route path="/" component={Home} />
-           </Switch>
-        </main>
-    </HashRouter>
+    <AuthContext.Provider 
+      value={ {isAuthenticated, setIsAuthenticated} }>
+
+        <HashRouter>
+            <NavbarWithRouter  />
+            <main className="container pt-5">
+                <Switch>
+                    <PrivateRoute  path="/customers"  component={CustomerPagination} /> 
+                    <PrivateRoute  path="/invoices"   component={InvoicePagination}  /> 
+                    <Route         path="/login"      component={Login}              />
+                    <Route         path="/"           component={Home}               />
+                </Switch>
+            </main>
+        </HashRouter>
+
+    </AuthContext.Provider>
     );
 }
-
 const el = document.querySelector('#app');
 ReactDom.render(<App />, el)
-
-

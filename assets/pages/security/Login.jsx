@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import AuthApi from '../../services/AuthApi';
+import AuthContext from '../../context/AuthContext';
 
-const Login = ({onLogin, history}) => {
+const Login = ({ history}) => {
+
+    const {isAuthenticated, setIsAuthenticated } =  useContext(AuthContext)
 
     const [credentials, setCredentials] = useState({
         username: '',
@@ -18,7 +21,7 @@ const Login = ({onLogin, history}) => {
         e.preventDefault();
         try {
             await AuthApi.authenticate(credentials);
-            onLogin(true)
+            setIsAuthenticated(true)
             setErrors('')
             // redirection   
             history.replace("/customers") 

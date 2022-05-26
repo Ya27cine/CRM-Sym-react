@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 
 
-const CustomerForm = () => {
+const CustomerForm = ({history}) => {
 
     const [customer, setCustomer] = useState({
         firstname: '',
@@ -28,12 +28,16 @@ const CustomerForm = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const result = await axios
+                await axios
                     .post("https://localhost:8000/api/customers", customer);
-            console.log( result )
+                history.push("/customers")  
+                setErrors( {} )
         } catch (error) {
-            console.log( error.response.data )
-            setErrors({...errors, firstname: "non valid"})
+            const apiErrors =  {};
+            error.response.data.violations.forEach(violation => {
+                 apiErrors[violation.propertyPath] = violation.message
+            });
+            setErrors( apiErrors )
         }
     }
 

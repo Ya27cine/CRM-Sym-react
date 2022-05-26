@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import moment from 'moment';
-import Currencies from './../services/Currencies'
-import Pagination from '../components/Pagination';
-import InvoiceApi from '../services/InvoiceApi';
+import Currencies from '../../services/Currencies'
+import Pagination from '../../components/Pagination';
+import InvoiceApi from '../../services/InvoiceApi';
 
 const InvoicePagination = () => {
 

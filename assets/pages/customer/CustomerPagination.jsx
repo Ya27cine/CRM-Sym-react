@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Pagination from '../components/Pagination'
-import CustomerApi from '../services/CustomerApi'
+import { Link } from 'react-router-dom'
+import Pagination from '../../components/Pagination'
+import CustomerApi from '../../services/CustomerApi'
 
 const CustomerPagination = () => {
 
@@ -45,7 +46,10 @@ const CustomerPagination = () => {
 
     return( 
      <>
-     <h1>Customer list </h1>
+        <div className="mb-2 d-flex justify-content-between align-items-center">
+            <h1>Customer list </h1>
+            <Link to="/customers/new" className="btn btn-primary">Create a customer</Link>
+        </div>
 
         <div className="form-group">
             <input  className="form-control" 

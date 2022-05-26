@@ -1,6 +1,6 @@
 import React , {useEffect, useState} from 'react'
 import axios from "axios"
-import Pagination from '../components/Pagination'
+import Pagination from '../../components/Pagination'
 
 const Customer = () => {
     

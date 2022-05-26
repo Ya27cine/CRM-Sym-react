@@ -1,6 +1,8 @@
 import React, {useState, useContext} from 'react';
 import AuthApi from '../../services/AuthApi';
 import AuthContext from '../../context/AuthContext';
+import Field from '../../components/forms/Field';
+
 
 const Login = ({ history}) => {
 
@@ -36,34 +38,31 @@ const Login = ({ history}) => {
         <>
           <form onSubmit={handleSubmit}>
               <h1>Login</h1>
-                <div className="from-group">
-                     <label className="form-label" htmlFor="_email">Email address</label>
-                    <input name="username" type="email" id="_email" 
-                        className={"form-control "+ ( errors && "is-invalid") }  
-                        placeholder="example@email.com" 
-                        value={credentials.email}
-                        onChange={handleChange}
-                    />
-                     
-                    { errors &&  <p className="invalid-feedback"> {errors} </p>}
-                   
-                </div>
+                
+                <Field 
+                 name="username" 
+                 type="email"
+                 label="Email address"
+                 placeholder="example@email.com" 
+                 value={credentials.email}  
+                 onChange={handleChange} 
+                 errors={errors} />
 
-                <div className="from-group">
-                    <label className="form-label" htmlFor="_password">Password</label>
-                    <input name="password" type="password" id="_password" 
-                          className="form-control"  
-                          placeholder="password ..." 
-                         value={credentials.password}
-                         onChange={handleChange}
-                    />
-                </div>
+                <Field 
+                 name="password" 
+                 type="password"
+                 label="Password"
+                 value={credentials.password}  
+                 onChange={handleChange} 
+                 errors={errors} />
 
-                <button type="submit"  className="btn btn-success btn-block mt-3">Sign in</button>
-
+                <button 
+                    type="submit"  
+                    className="btn btn-success btn-block mt-3">
+                    Sign in
+                </button>
             </form>
         </>
      );
 }
- 
 export default Login;

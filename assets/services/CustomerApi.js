@@ -1,18 +1,29 @@
 import axios from 'axios'
 
-const findAll = async (countItems, currentPage, search) => {
+const findAll = async (countItems='All', currentPage=1, search='') => {
     let data;
-    await axios
-    .get("https://localhost:8000/api/customers?pagination=true&count="+countItems+"&page="+currentPage+"&firstname="+search)
-    .then( (res)   => 
-        {
-            data = {
-                    customers:  res.data['hydra:member'],
-                    totalItems: res.data['hydra:totalItems']
-                }
-        })
-    .catch( (er)  => console.error(er) )
-    return data;
+    if(countItems != 'All'){
+        await axios
+        .get("https://localhost:8000/api/customers?pagination=true&count="+countItems+"&page="+currentPage+"&firstname="+search)
+        .then( (res)   => 
+            {
+                data = {
+                        customers:  res.data['hydra:member'],
+                        totalItems: res.data['hydra:totalItems']
+                    }
+            })
+        .catch( (er)  => console.error(er) )
+        return data;
+    }else{
+        await axios
+        .get("https://localhost:8000/api/customers")
+        .then( (res)   => {
+                data =  res.data['hydra:member']        
+            })
+        .catch( (er)  => console.error(er) )
+        return data;
+    }
+    
 }
 
 const find =  (id) => {

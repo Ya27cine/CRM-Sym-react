@@ -49,20 +49,32 @@ const InvoiceForm = ({match, history}) => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            console.log('isEditing', isEditing)
-            console.log('invoice', invoice)
-                if(isEditing){
-                    // await InvoiceApi.put( invoice )
-                }else{
-                    await InvoiceApi.post( invoice )
-                }         
-                history.replace("/invoices")  
-                setErrors({})
+            // error customer not given
+            if(!invoice.customer){
+                setErrors({customer: "Please select a customer"});
+                return;
+            }
+            if(isEditing){
+                // await InvoiceApi.put( invoice )
+            }else{
+                await InvoiceApi.post( invoice )
+            }         
+            history.replace("/invoices")  
+            setErrors({})
 
         } catch (error) {
             // TODO notify
             const apiErrors =  {};
-            console.log('response:', error)     
+            const { response } = error;
+
+            if( response && response.data && response.data.violations ){
+                const { violations } = response.data
+                violations.forEach( ({propertyPath, message}) =>
+                           apiErrors[propertyPath] = message);
+                setErrors( apiErrors )
+            }else{
+                console.log(response)
+            }   
         }
     }
 
@@ -92,7 +104,7 @@ const InvoiceForm = ({match, history}) => {
                 value={invoice.customer}
                 onChange={handleChange}
                 >
-                     <option key="_default" value="" > Chosen customer</option>
+                     <option key="_default" value="" > Choose customer</option>
                     { myCustomers.map( (customer) => 
                         <option key={customer.id} value={customer.id}> {customer.lastname} {customer.firstname}</option>
                     )}       
@@ -106,7 +118,7 @@ const InvoiceForm = ({match, history}) => {
                 value={invoice.status}
                 onChange={handleChange}
                 >
-                    <option value="" > Chosen customer</option>
+                    <option value="" > Choose Status</option>
                     <option value="SENT">Sent</option>
                     <option value="CANCELLED">Cancelled</option>
                     <option value="PAID">Paid</option>

@@ -9,13 +9,15 @@ const findAll = async  (countItems, currentPage, search) => {
 }
 
 const post = (invoice) => {
+    invoice = invoice.customer ? { ...invoice, customer: "/api/customers/"+invoice.customer} : invoice;
     return  axios
-            .post("https://localhost:8000/api/invoices", { ...invoice, customer: "/api/customers/"+invoice.customer});
+            .post("https://localhost:8000/api/invoices", invoice);
 }
 
 const put = (id, invoice) => {
+    invoice = invoice.customer ? { ...invoice, customer: "/api/customers/"+invoice.customer} : invoice;
     return axios
-            .put("https://localhost:8000/api/invoices/"+id, { ...invoice, customer: "/api/customers/"+invoice.customer});
+            .put("https://localhost:8000/api/invoices/"+id, invoice);
 }
 
 export default{

@@ -11,7 +11,7 @@ const Select = ({name,required ='', label = name, children, errors, onChange, va
                     required={required}
                     name={name} 
                     id={name} 
-                    className={"form-control" + (errors && " is-valide") } >
+                    className={"form-control" + (errors && " is-invalid" || "") } >
                         { children }
                 </select>
                 { errors &&  <p className="invalid-feedback"> {errors} </p>}  

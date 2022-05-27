@@ -10,7 +10,7 @@ const Field = ({name, label, type='text', value,placeholder, onChange, errors = 
                 name={name} 
                 type={type} 
                 id={name}
-                className={"form-control "+ ( errors && "is-invalid") }  
+                className={"form-control "+ ( errors && "is-invalid" || "") }  
                 placeholder={placeholder || label }
                 value={value}
                 required={required}

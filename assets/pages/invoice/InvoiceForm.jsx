@@ -14,9 +14,9 @@ const InvoiceForm = ({match, history}) => {
         status: ''
     });
     const [errors, setErrors] = useState({
-        "amount": '',
-        "customer": '',
-        "status": ''
+        amount: '',
+        customer: '',
+        status: ''
     });
 
     const [isEditing, setIsEditing] = useState(false);
@@ -30,8 +30,9 @@ const InvoiceForm = ({match, history}) => {
    
     useEffect(() => {
        fetchMyCustomers()
-       if( id !== "new"){
-           setIsEditing(true)
+       setIsEditing( id !== "new" )
+       if( isEditing ){
+       }else{
        }
     }, [id])
 
@@ -41,6 +42,9 @@ const InvoiceForm = ({match, history}) => {
         setInvoice({ ...invoice, [name]: value})
     }
 
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+    }
     
     return ( 
         <>
@@ -49,7 +53,7 @@ const InvoiceForm = ({match, history}) => {
                        || <h1 className="mb-3">Invoice </h1>
         }  
 
-        <form >
+        <form onSubmit={handleSubmit}>
 
          <Field 
             name="amount" 
@@ -62,12 +66,14 @@ const InvoiceForm = ({match, history}) => {
             errors={errors.amount} />
 
             <Select 
+                required="required"
                 name="customer" 
                 label="Customer" 
                 errors={errors.customer}
                 value={invoice.customer}
                 onChange={handleChange}
                 >
+                     <option key="_default" value="" > Chosen customer</option>
                     { myCustomers.map( (customer) => 
                         <option key={customer.id} value={customer.id}> {customer.lastname} {customer.firstname}</option>
                     )}       

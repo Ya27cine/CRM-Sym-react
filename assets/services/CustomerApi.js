@@ -15,6 +15,22 @@ const findAll = async (countItems, currentPage, search) => {
     return data;
 }
 
+const find =  (id) => {
+   return axios
+            .get("https://localhost:8000/api/customers/"+id)
+            .then((rep) => rep.data)
+}
+
+const put = (id, customer) => {
+    return axios
+            .put("https://localhost:8000/api/customers/"+id, customer);
+}
+
+const post = (customer) => {
+    return  axios
+            .post("https://localhost:8000/api/customers", customer);
+}
+
 const deleteCustomer = (id) => {
    return axios.delete("/api/customers/"+id)
 }
@@ -22,7 +38,10 @@ const deleteCustomer = (id) => {
 
 export default {
  findAll,
- delete: deleteCustomer
+ delete: deleteCustomer,
+ find,
+ post,
+ put
 };
 
 

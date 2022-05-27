@@ -1,10 +1,12 @@
-import axios from 'axios';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
+import CustomerApi from '../../services/CustomerApi';
 
+const CustomerForm = (props) => {
 
-const CustomerForm = ({history}) => {
+    const { id = "new" } = props.match.params;
+    const [isEditing, setIsEditing] = useState(false)
 
     const [customer, setCustomer] = useState({
         firstname: '',
@@ -20,29 +22,71 @@ const CustomerForm = ({history}) => {
         company: ''
     })
 
+    /**
+     * Get customer data , When user choices mode editing
+     * @param { customer id }
+     */
+    const fetchCustomer = async (id) => {
+        try {
+            const data =  await CustomerApi.find(id)
+            const {firstname, lastname, email, company} = data
+            setCustomer( {firstname, lastname, email, company} )
+        } catch (error){
+            //TODO notif 
+            props.history.replace("/customers")
+        }
+    }
+
+    /**
+     * Check mode editing 
+     *      && 
+     * Loading customer data 
+     */
+    useEffect(() => {
+        if(id !== "new"){
+           setIsEditing( true)
+           fetchCustomer(id)
+        }
+    }, [id])
+
     const handleChange =  ( {currentTarget} ) => {
         let {name, value} = currentTarget
         setCustomer({ ...customer, [name]: value})
     }
 
+    /**
+     * Form submission management.
+     */
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-                await axios
-                    .post("https://localhost:8000/api/customers", customer);
-                history.push("/customers")  
-                setErrors( {} )
-        } catch (error) {
+                if(isEditing){
+                    await CustomerApi.put(id, customer)
+                }else{
+                   await CustomerApi.post( customer )
+                }         
+                props.history.replace("/customers")  
+                setErrors({})
+
+        } catch ({response}) {
+            // TODO notify
             const apiErrors =  {};
-            error.response.data.violations.forEach(violation => {
-                 apiErrors[violation.propertyPath] = violation.message
-            });
-            setErrors( apiErrors )
+            const { violations } = response.data
+            if( violations ){
+                violations.forEach( ({propertyPath, message}) =>
+                           apiErrors[propertyPath] = message);
+                setErrors( apiErrors )
+            }else{
+                console.log(response)
+            }       
         }
     }
 
     return (  <>
-        <h1 className="mb-3">Creating a customer</h1>
+        {
+            (isEditing && <h1 className="mb-3">Customer modification</h1> ) 
+                       || <h1 className="mb-3">Creating a customer</h1>
+        }  
 
         <form onSubmit={handleSubmit}>
 
@@ -80,7 +124,10 @@ const CustomerForm = ({history}) => {
                     errors={errors.company} />
 
                 <div className="form-group mt-2">
-                    <button className="btn btn-success" type="submit">Create</button>
+                    { ( isEditing &&  <button className="btn btn-danger" type="submit">Edit</button>)
+                                  ||  <button className="btn btn-success" type="submit">Create</button>
+                    }
+                   
                     <Link to="/customers" className="btn btn-link">Back to the list</Link>
                 </div>
         </form>

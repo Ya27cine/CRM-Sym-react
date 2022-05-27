@@ -83,7 +83,7 @@ const CustomerPagination = () => {
                         <td> {customer.invoices.length} </td>
                         <td> {customer.totalAmount.toLocaleString()}</td>
                         <td>
-                            <button className="btn btn-sm btn-primary mx-2">Edit</button>
+                            <Link to={"/customers/"+customer.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
                             <button 
                             disabled={ customer.invoices.length > 0}
                             onClick={() =>onDelete(customer.id)} 

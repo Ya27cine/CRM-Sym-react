@@ -1,10 +1,10 @@
-import axios from 'axios'
+import Http from './Http'
 
 const findAll = async (countItems='All', currentPage=1, search='') => {
     let data;
     if(countItems != 'All'){
-        await axios
-        .get("https://localhost:8000/api/customers?pagination=true&count="+countItems+"&page="+currentPage+"&firstname="+search)
+        await Http
+        .get("customers?pagination=true&count="+countItems+"&page="+currentPage+"&firstname="+search)
         .then( (res)   => 
             {
                 data = {
@@ -15,35 +15,31 @@ const findAll = async (countItems='All', currentPage=1, search='') => {
         .catch( (er)  => console.error(er) )
         return data;
     }else{
-        await axios
-        .get("https://localhost:8000/api/customers")
-        .then( (res)   => {
-                data =  res.data['hydra:member']        
-            })
-        .catch( (er)  => console.error(er) )
+        await Http.get("customers")
+            .then( (res)   => {
+                    data =  res.data['hydra:member']        
+                })
+            .catch( (er)  => console.error(er) )
         return data;
     }
     
 }
 
 const find =  (id) => {
-   return axios
-            .get("https://localhost:8000/api/customers/"+id)
-            .then((rep) => rep.data)
+   return Http.get("customers/"+id)
+              .then((rep) => rep.data)
 }
 
 const put = (id, customer) => {
-    return axios
-            .put("https://localhost:8000/api/customers/"+id, customer);
+    return Http.put("customers/"+id, customer);
 }
 
 const post = (customer) => {
-    return  axios
-            .post("https://localhost:8000/api/customers", customer);
+    return  Http.post("customers", customer);
 }
 
 const deleteCustomer = (id) => {
-   return axios.delete("/api/customers/"+id)
+   return Http.delete("/api/customers/"+id)
 }
 
 
@@ -54,15 +50,3 @@ export default {
  post,
  put
 };
-
-
-
-
-
-// axios
-//          .get("http://localhost:8000/api/customers?pagination=true&count="+countItmes+"&page="+currentPage+"&firstname="+search)
-//          .then( (res)   => {
-//              setCustomers( res.data['hydra:member'] )
-//              setTotalItems( res.data['hydra:totalItems'] );
-//          })
-//          .catch( (er)  => console.error(er) )

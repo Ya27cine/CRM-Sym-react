@@ -29,25 +29,30 @@ const InvoiceForm = ({match, history}) => {
         .catch(  error  =>   console.log( error)    )
     }
    
-    const fetchInvoice= async (id) => {
+    /**
+     * Get invoice data , When user choices mode editing
+     * @param { customer id }
+     */
+    const fetchInvoice = async (id) => {
         try {
-            const data =  await InvoiceApi.find(id)
-            const { amount, status, customer } = data;
+            const { amount, status, customer }  =  await InvoiceApi.find( id )
             setInvoice( { amount, status, customer: customer.id } );
         } catch (error){
-            console.log("error", error)
             history.replace("/invoices")
         }
     }
 
+    /**
+     * Check mode editing 
+     *      && 
+     * Loading invoice data 
+     */
     useEffect(() => {
         fetchMyCustomers()
-       
         if( id !== "new" ){
             setIsEditing(true);
             fetchInvoice(id)
         }
-
     }, [id])
 
 
@@ -62,28 +67,24 @@ const InvoiceForm = ({match, history}) => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            // error customer not given
             if(!invoice.customer){
                 setErrors({customer: "Please select a customer"});
                 return;
             }
             if(isEditing){
-                // await InvoiceApi.put( invoice )
-
+                await InvoiceApi.put( id, invoice )
             }else{
                 await InvoiceApi.post( invoice )
             }         
             history.replace("/invoices")  
             setErrors({})
 
-        } catch (error) {
+        } catch ({ response }) {
             // TODO notify
             const apiErrors =  {};
-            const { response } = error;
-
             if( response && response.data && response.data.violations ){
                 const { violations } = response.data
-                violations.forEach( ({propertyPath, message}) =>
+                violations.forEach( ({propertyPath, message} ) =>
                            apiErrors[propertyPath] = message);
                 setErrors( apiErrors )
             }else{

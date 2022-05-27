@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Select = ({name,required ='', label = name, children, errors, onChange, value}) => {
+const Select = ({name,required ='', label = name, children, errors= '', onChange, value}) => {
     return ( <>
             <div className="form-group">
                 <label htmlFor="status">{label}</label>
@@ -11,7 +11,7 @@ const Select = ({name,required ='', label = name, children, errors, onChange, va
                     required={required}
                     name={name} 
                     id={name} 
-                    className={"form-control" + (errors && " is-invalid" || "") } >
+                    className={"form-control" + (errors && " is-invalid") } >
                         { children }
                 </select>
                 { errors &&  <p className="invalid-feedback"> {errors} </p>}  

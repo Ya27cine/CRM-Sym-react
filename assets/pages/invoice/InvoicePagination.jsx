@@ -80,7 +80,7 @@ const InvoicePagination = () => {
                     </td>
                     <td>{invoice.amount.toLocaleString()}  {Currencies.currency()}</td>
                     <td>               
-                        <button className="btn btn-sm btn-primary mx-2">Edit</button>
+                        <Link to={"/invoices/"+invoice.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
                         <button 
                         disabled={ invoice.status !== "CANCELLED"}
                         className="btn btn-sm btn-danger">

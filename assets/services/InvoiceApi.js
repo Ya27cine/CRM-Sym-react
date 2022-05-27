@@ -8,6 +8,12 @@ const findAll = async  (countItems, currentPage, search) => {
                  +"&page="+currentPage+"&status="+search)
 }
 
+const post = (invoice) => {
+    return  axios
+            .post("https://localhost:8000/api/invoices", { ...invoice, customer: "/api/customers/"+invoice.customer});
+}
+
 export default{
-    findAll
+    findAll,
+    post
 }

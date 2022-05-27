@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 import Select from '../../components/forms/Select';
 import CustomerApi from '../../services/CustomerApi';
+import InvoiceApi from '../../services/InvoiceApi';
 
 const InvoiceForm = ({match, history}) => {
     const {id} = match.params
@@ -42,10 +43,29 @@ const InvoiceForm = ({match, history}) => {
         setInvoice({ ...invoice, [name]: value})
     }
 
-    const handleSubmit = async (e) =>{
+    /**
+     * Form submission management.
+     */
+    const handleSubmit = async e => {
         e.preventDefault();
+        try {
+            console.log('isEditing', isEditing)
+            console.log('invoice', invoice)
+                if(isEditing){
+                    // TODO : edit an invoice
+                }else{
+                    await InvoiceApi.post( invoice )
+                }         
+                history.replace("/invoices")  
+                setErrors({})
+
+        } catch (error) {
+            // TODO notify
+            const apiErrors =  {};
+            console.log('response:', error)     
+        }
     }
-    
+
     return ( 
         <>
              {
@@ -54,16 +74,15 @@ const InvoiceForm = ({match, history}) => {
         }  
 
         <form onSubmit={handleSubmit}>
-
-         <Field 
-            name="amount" 
-            label="Amount"
-            type="number"
-            value={invoice.amount}  
-            placeholder="Amount Invoice"
-            onChange={handleChange} 
-            required="required"
-            errors={errors.amount} />
+            <Field 
+                name="amount" 
+                label="Amount"
+                type="number"
+                value={invoice.amount}  
+                placeholder="Amount Invoice"
+                onChange={handleChange} 
+                required="required"
+                errors={errors.amount} />
 
             <Select 
                 required="required"
@@ -80,12 +99,14 @@ const InvoiceForm = ({match, history}) => {
             </Select>
 
             <Select 
+                required="required"
                 name="status" 
                 label="Status" 
                 errors={errors.status}
                 value={invoice.status}
                 onChange={handleChange}
                 >
+                    <option value="" > Chosen customer</option>
                     <option value="SENT">Sent</option>
                     <option value="CANCELLED">Cancelled</option>
                     <option value="PAID">Paid</option>

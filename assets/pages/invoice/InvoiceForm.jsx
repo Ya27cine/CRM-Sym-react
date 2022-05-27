@@ -52,7 +52,7 @@ const InvoiceForm = ({match, history}) => {
             console.log('isEditing', isEditing)
             console.log('invoice', invoice)
                 if(isEditing){
-                    // TODO : edit an invoice
+                    // await InvoiceApi.put( invoice )
                 }else{
                     await InvoiceApi.post( invoice )
                 }         

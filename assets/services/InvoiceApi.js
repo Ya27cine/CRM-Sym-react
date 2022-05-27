@@ -13,7 +13,13 @@ const post = (invoice) => {
             .post("https://localhost:8000/api/invoices", { ...invoice, customer: "/api/customers/"+invoice.customer});
 }
 
+const put = (id, invoice) => {
+    return axios
+            .put("https://localhost:8000/api/invoices/"+id, { ...invoice, customer: "/api/customers/"+invoice.customer});
+}
+
 export default{
     findAll,
-    post
+    post,
+    put
 }

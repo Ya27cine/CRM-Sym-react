@@ -29,12 +29,25 @@ const InvoiceForm = ({match, history}) => {
         .catch(  error  =>   console.log( error)    )
     }
    
+    const fetchInvoice= async (id) => {
+        try {
+            const data =  await InvoiceApi.find(id)
+            const { amount, status, customer } = data;
+            setInvoice( { amount, status, customer: customer.id } );
+        } catch (error){
+            console.log("error", error)
+            history.replace("/invoices")
+        }
+    }
+
     useEffect(() => {
-       fetchMyCustomers()
-       setIsEditing( id !== "new" )
-       if( isEditing ){
-       }else{
-       }
+        fetchMyCustomers()
+       
+        if( id !== "new" ){
+            setIsEditing(true);
+            fetchInvoice(id)
+        }
+
     }, [id])
 
 
@@ -56,6 +69,7 @@ const InvoiceForm = ({match, history}) => {
             }
             if(isEditing){
                 // await InvoiceApi.put( invoice )
+
             }else{
                 await InvoiceApi.post( invoice )
             }         

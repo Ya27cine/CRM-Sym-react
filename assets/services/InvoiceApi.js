@@ -8,6 +8,12 @@ const findAll = async  (countItems, currentPage, search) => {
                  +"&page="+currentPage+"&status="+search)
 }
 
+const find =  (id) => {
+    return axios
+             .get("https://localhost:8000/api/invoices/"+id)
+             .then((rep) => rep.data)
+ }
+
 const post = (invoice) => {
     invoice = invoice.customer ? { ...invoice, customer: "/api/customers/"+invoice.customer} : invoice;
     return  axios
@@ -20,8 +26,10 @@ const put = (id, invoice) => {
             .put("https://localhost:8000/api/invoices/"+id, invoice);
 }
 
+
 export default{
     findAll,
     post,
-    put
+    put,
+    find
 }

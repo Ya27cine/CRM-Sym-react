@@ -27,12 +27,11 @@ class InvoiceChronoSubscriber implements EventSubscriberInterface{
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['incrementChrono', EventPriorities::PRE_VALIDATE]
+            KernelEvents::VIEW => ['incrementChrono', EventPriorities::PRE_VALIDATE],
         ];
     }
 
     public function incrementChrono(ViewEvent $event){
-
         $invoice = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
@@ -47,4 +46,5 @@ class InvoiceChronoSubscriber implements EventSubscriberInterface{
                 $invoice->setSentAt(new \DateTime());
         } 
     }
+
 }

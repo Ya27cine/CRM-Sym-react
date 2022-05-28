@@ -1,5 +1,6 @@
-import axios from "axios";
 import jwtDecode from "jwt-decode";
+import Http from './Http'
+
 
 /**
  *  Load the JWT as soon as the React app starts.
@@ -21,7 +22,7 @@ function setup(){
  * @return bool
  */
 function isAuthenticated(){
-   return  setup(); e
+   return  setup();
 }
 
 /**
@@ -30,8 +31,7 @@ function isAuthenticated(){
  * @param {object} credentials 
  */
  async function authenticate(credentials){
-    await axios.
-        post("http://localhost:8000/api/login_check", credentials)
+    await Http.post("login_check", credentials)
         .then( response => response.data.token )
         .then( token => {
             window.localStorage.setItem("auth", token)
@@ -41,7 +41,7 @@ function isAuthenticated(){
 }
 
 function setAxiosToken(token){
-    axios.defaults.headers["Authorization"] = "Bearer " + token;
+    Http.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
 /**
@@ -49,7 +49,11 @@ function setAxiosToken(token){
  */
 function logout(){
     window.localStorage.removeItem("auth")
-    delete axios.defaults.headers["Authorization"];
+    delete Http.defaults.headers["Authorization"];
+}
+
+function register(user){
+   return Http.post("users", user)
 }
 
 
@@ -57,5 +61,6 @@ export default {
     authenticate, 
     logout,
     setup,
+    register,
     isAuthenticated,
 }

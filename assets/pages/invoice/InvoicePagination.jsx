@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import moment from 'moment';
-import Currencies from './../services/Currencies'
-import Pagination from '../components/Pagination';
-import InvoiceApi from '../services/InvoiceApi';
+import Currencies from '../../services/Currencies'
+import Pagination from '../../components/Pagination';
+import InvoiceApi from '../../services/InvoiceApi';
+import { Link } from 'react-router-dom';
 
 const InvoicePagination = () => {
 
@@ -39,7 +40,10 @@ const InvoicePagination = () => {
     }
 
     return (<> 
-     <h1>Invoices list </h1>
+     <div className="mb-2 d-flex justify-content-between align-items-center">
+            <h1>Invoices list </h1>
+            <Link to="/invoices/new" className="btn btn-primary">Create a invoice</Link>
+    </div>
 
     <div className="form-group">
             <input  className="form-control" 
@@ -76,7 +80,7 @@ const InvoicePagination = () => {
                     </td>
                     <td>{invoice.amount.toLocaleString()}  {Currencies.currency()}</td>
                     <td>               
-                        <button className="btn btn-sm btn-primary mx-2">Edit</button>
+                        <Link to={"/invoices/"+invoice.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
                         <button 
                         disabled={ invoice.status !== "CANCELLED"}
                         className="btn btn-sm btn-danger">

@@ -1,12 +1,11 @@
 import React , {useEffect, useState} from 'react'
 import axios from "axios"
-import Pagination from '../components/Pagination'
+import Pagination from '../../components/Pagination'
 
 const Customer = () => {
-
+    
     const [ customers, setCustomers] =  useState([])
     const [ currentPage, setCurrentPage] =  useState(1)
-
 
     //--------- pagination 
     let countItmes = 10;

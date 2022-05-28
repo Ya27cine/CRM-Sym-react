@@ -52,10 +52,15 @@ function logout(){
     delete Http.defaults.headers["Authorization"];
 }
 
+function register(user){
+   return Http.post("users", user)
+}
+
 
 export default { 
     authenticate, 
     logout,
     setup,
+    register,
     isAuthenticated,
 }

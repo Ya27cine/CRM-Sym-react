@@ -12,6 +12,7 @@ import Login from './pages/security/Login';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
 import InvoiceForm from './pages/invoice/InvoiceForm';
+import Register from './pages/security/Register';
 
 
 // Load the JWT as soon as the React app starts
@@ -34,6 +35,7 @@ const App = () =>{
                     <PrivateRoute  path="/invoices/:id"   component={InvoiceForm}        /> 
                     <PrivateRoute  path="/customers"      component={CustomerPagination} /> 
                     <PrivateRoute  path="/invoices"       component={InvoicePagination}  /> 
+                    <Route         path="/register"       component={Register}           />
                     <Route         path="/login"          component={Login}              />
                     <Route         path="/"               component={Home}               />
                 </Switch>

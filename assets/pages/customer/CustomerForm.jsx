@@ -65,9 +65,8 @@ const CustomerForm = (props) => {
                 }else{
                    await CustomerApi.post( customer )
                 }         
-                props.history.replace("/customers")  
                 setErrors({})
-
+                props.history.replace("/customers")  
         } catch ({response}) {
             // TODO notify
             const apiErrors =  {};

@@ -36,7 +36,7 @@ const Navbar = ({ history }) => {
                   &&
                   <>
                     <li className="nav-item">
-                        <NavLink className="nav-link" to="/">Register</NavLink>
+                        <NavLink className="nav-link" to="/register">Register</NavLink>
                       </li>
                       <li className="nav-item">
                         <NavLink className="btn btn-success" to="/login">Login</NavLink>

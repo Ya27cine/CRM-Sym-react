@@ -7,7 +7,7 @@ import CustomerApi from '../../services/CustomerApi';
 import InvoiceApi from '../../services/InvoiceApi';
 
 const InvoiceForm = ({match, history}) => {
-    const {id} = match.params
+    const {id = "new"}  = match.params
 
     const [invoice, setInvoice] = useState({
         amount: '',
@@ -48,12 +48,17 @@ const InvoiceForm = ({match, history}) => {
      * Loading invoice data 
      */
     useEffect(() => {
-        fetchMyCustomers()
+
         if( id !== "new" ){
             setIsEditing(true);
             fetchInvoice(id)
         }
     }, [id])
+
+    /**
+     * Get my list customers
+     */
+    useEffect(() =>{ fetchMyCustomers() }, [])
 
 
     const handleChange =  ( {currentTarget} ) => {
@@ -76,8 +81,8 @@ const InvoiceForm = ({match, history}) => {
             }else{
                 await InvoiceApi.post( invoice )
             }         
-            history.replace("/invoices")  
             setErrors({})
+            history.replace("/invoices")  
 
         } catch ({ response }) {
             // TODO notify

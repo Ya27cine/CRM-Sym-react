@@ -27,13 +27,16 @@ const Login = ({ history}) => {
             setErrors('')
             toast.success("login success ! ", {
                 position: toast.POSITION.TOP_CENTER,
-                autoClose: 750
+                autoClose: 770
               });
             // redirection   
             history.replace("/customers") 
             
         } catch (error) {
-           // console.log("error login",error)
+            toast.error("Email or password are not correct ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2770
+              });
             setErrors("error bad credentials")
         } 
     }

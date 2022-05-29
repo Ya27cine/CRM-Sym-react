@@ -39,7 +39,7 @@ const post = (customer) => {
 }
 
 const deleteCustomer = (id) => {
-   return Http.delete("/api/customers/"+id)
+   return Http.delete("customers/"+id)
 }
 
 

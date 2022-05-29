@@ -41,7 +41,7 @@ const Register = ({history}) => {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 1770
             });
-            setErrors({confirmPassword: "The password confirmed is not match the password"})
+            setErrors({confirmPassword: "The two password  don't match."})
             return;
         }
         try {

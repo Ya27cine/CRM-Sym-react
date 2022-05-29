@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import AuthApi from '../services/AuthApi';
 import { toast } from 'react-toastify';
+import AlertDialog from './AlertDialog/AlertDialog';
+import ConfigDrawer from './drawer/ConfigDrawer';
 
 
 const Navbar = ({ history }) => {
@@ -54,11 +56,15 @@ const Navbar = ({ history }) => {
                   ||
                   <>
                    <li className="nav-item">
-                      <button 
+                      {/* <button 
                         className="btn btn-danger"
                         onClick={handleLogout} 
-                      >Logout</button>
+                      >Logout</button> */}
+                      <AlertDialog text="logout" color="error"  onLogout={handleLogout} />
                    </li>
+                   <li className="nav-item">
+                    <ConfigDrawer />
+                  </li>
                   </>    
                 )}                                       
               </ul>

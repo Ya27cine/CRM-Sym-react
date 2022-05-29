@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
-import Select from '../../components/forms/Select';
+import MySelect from '../../components/forms/Select';
 import CustomerApi from '../../services/CustomerApi';
 import InvoiceApi from '../../services/InvoiceApi';
 import { toast } from 'react-toastify';
 import FormLoader from '../../components/loader/FormLoader';
-
 
 const InvoiceForm = ({match, history}) => {
     const {id = "new"}  = match.params
@@ -16,7 +15,8 @@ const InvoiceForm = ({match, history}) => {
     const [invoice, setInvoice] = useState({
         amount: '',
         customer: '',
-        status: ''
+        status: '',
+        age: ''
     });
     const [errors, setErrors] = useState({
         amount: '',
@@ -131,7 +131,7 @@ const InvoiceForm = ({match, history}) => {
                     required="required"
                     errors={errors.amount} />
 
-                <Select 
+                <MySelect 
                     required="required"
                     name="customer" 
                     label="Customer" 
@@ -143,9 +143,9 @@ const InvoiceForm = ({match, history}) => {
                         { myCustomers.map( (customer) => 
                             <option key={customer.id} value={customer.id}> {customer.lastname} {customer.firstname}</option>
                         )}       
-                </Select>
+                </MySelect>
 
-                <Select 
+                <MySelect 
                     required="required"
                     name="status" 
                     label="Status" 
@@ -157,7 +157,7 @@ const InvoiceForm = ({match, history}) => {
                         <option value="SENT">Sent</option>
                         <option value="CANCELLED">Cancelled</option>
                         <option value="PAID">Paid</option>
-                </Select>
+                </MySelect>
 
                 <div className="form-group mt-2">
                         { ( isEditing &&  <button className="btn btn-danger" type="submit">Edit</button>)

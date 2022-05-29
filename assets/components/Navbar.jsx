@@ -2,6 +2,8 @@ import React, {useContext} from 'react'
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import AuthApi from '../services/AuthApi';
+import { toast } from 'react-toastify';
+
 
 const Navbar = ({ history }) => {
  
@@ -10,6 +12,13 @@ const Navbar = ({ history }) => {
   const handleLogout = () => {
     AuthApi.logout() // delete token
     setIsAuthenticated( false )
+
+     // notify
+     toast.success("Logout success ! ", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 1270
+    });
+
     history.push("/login") // redirection
   }
 

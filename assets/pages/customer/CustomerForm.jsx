@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 import CustomerApi from '../../services/CustomerApi';
+import { toast } from 'react-toastify';
+
 
 const CustomerForm = (props) => {
 
@@ -68,7 +70,12 @@ const CustomerForm = (props) => {
                 setErrors({})
                 props.history.replace("/customers")  
         } catch ({response}) {
-            // TODO notify
+            // notify
+            toast.error("form has error ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1770
+              });
+
             const apiErrors =  {};
             const { violations } = response.data
             if( violations ){

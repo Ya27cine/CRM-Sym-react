@@ -12,8 +12,9 @@ import Login from './pages/security/Login';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
 import InvoiceForm from './pages/invoice/InvoiceForm';
-import Register from './pages/security/Register';
-
+import Register from './pages/security/Register.jsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Load the JWT as soon as the React app starts
 /** ===>  */  AuthApi.setup()
@@ -41,7 +42,7 @@ const App = () =>{
                 </Switch>
             </main>
         </HashRouter>
-
+        <ToastContainer />
     </AuthContext.Provider>
     );
 }

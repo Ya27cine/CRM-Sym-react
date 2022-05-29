@@ -1,13 +1,16 @@
-import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 import Select from '../../components/forms/Select';
 import CustomerApi from '../../services/CustomerApi';
 import InvoiceApi from '../../services/InvoiceApi';
+import { toast } from 'react-toastify';
+
 
 const InvoiceForm = ({match, history}) => {
     const {id = "new"}  = match.params
+
+    const [isLoading, setIsLoading] = useState(true)
 
     const [invoice, setInvoice] = useState({
         amount: '',
@@ -25,7 +28,7 @@ const InvoiceForm = ({match, history}) => {
     const [myCustomers, setMyCustomers] = useState([])
     const fetchMyCustomers = async () =>{
         await CustomerApi.findAll()
-        .then(   data   =>   setMyCustomers(  data ))
+        .then(   data   =>   setMyCustomers(  data ) )
         .catch(  error  =>   console.log( error)    )
     }
    
@@ -58,8 +61,7 @@ const InvoiceForm = ({match, history}) => {
     /**
      * Get my list customers
      */
-    useEffect(() =>{ fetchMyCustomers() }, [])
-
+    useEffect(() =>{ fetchMyCustomers();}, [])
 
     const handleChange =  ( {currentTarget} ) => {
         let {name, value} = currentTarget
@@ -85,7 +87,12 @@ const InvoiceForm = ({match, history}) => {
             history.replace("/invoices")  
 
         } catch ({ response }) {
-            // TODO notify
+            // notify
+            toast.error("form has error ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1770
+              });
+
             const apiErrors =  {};
             if( response && response.data && response.data.violations ){
                 const { violations } = response.data

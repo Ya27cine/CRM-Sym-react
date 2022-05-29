@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 import AuthApi from '../../services/AuthApi';
+import { toast } from 'react-toastify';
 
 
 const Register = ({history}) => {
@@ -22,7 +23,6 @@ const Register = ({history}) => {
         confirmPassword: ''
     })
 
-
     const handleChange =  ( {currentTarget} ) => {
         let {name, value} = currentTarget
         setUser({ ...user, [name]: value})
@@ -34,13 +34,28 @@ const Register = ({history}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Check password
+        if( user.password !== user.confirmPassword ){
+            // notify : 
+            toast.error("form has error ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1770
+            });
+            setErrors({confirmPassword: "The password confirmed is not match the password"})
+            return;
+        }
         try {
             const res = await AuthApi.register( user )
             console.log( res )
             // redirect :
             history.replace('/login');
         } catch ({response}) {
-             // TODO notify
+            // notify : 
+            toast.error("form has error ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1770
+              });
+
              const apiErrors =  {};
              if( response && response.data && response.data.violations ){
                  const { violations } = response.data

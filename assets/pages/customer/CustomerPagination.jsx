@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Pagination from '../../components/Pagination'
 import CustomerApi from '../../services/CustomerApi'
+import  TableLoader from '../../components/loader/TableLoader';
+import { toast } from 'react-toastify';
 
-const CustomerPagination = () => {
 
+const CustomerPagination = ( props ) => {
+
+    const [isLoading, setIsLoading] = useState(true)
     const [ customers, setCustomers] =  useState([])
     const [ currentPage, setCurrentPage] =  useState(1)
     const [ totalItems, setTotalItems] =  useState(0)
@@ -17,6 +21,7 @@ const CustomerPagination = () => {
         .then( (data) =>{
             setCustomers( data.customers );
             setTotalItems( data.totalItems );
+            setIsLoading( false )
         }).catch( e=>console.log(e));
        
     }, [currentPage, search])
@@ -33,10 +38,23 @@ const CustomerPagination = () => {
         {
             let res = await CustomerApi.delete(id)
             console.log("clicked handle delete !"+id, res)
+            // notify
+            toast.success("deleted !", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 970
+              });
         } catch (er) {
             setCustomers( customers_before )
+            // notify
+            toast.error("You can't delete it  !", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2770
+              });
             console.error(er) 
         }
+        // if the last item { update pagination}
+        if( customers.length == 1) setCurrentPage( currentPage -1);  
+        console.log("============>>>>", customers.length, ' ', currentPage)
     }
     // search with field: first-name 
     const handleSearch = ({currentTarget}) => {
@@ -51,6 +69,9 @@ const CustomerPagination = () => {
             <Link to="/customers/new" className="btn btn-primary">Create a customer</Link>
         </div>
 
+        { isLoading &&  <TableLoader />}
+        { ! isLoading && <> 
+
         <div className="form-group">
             <input  className="form-control" 
                 value={search}
@@ -60,7 +81,6 @@ const CustomerPagination = () => {
                 id="search"  
                 placeholder="Search ... {first-name}" />
         </div>
-
          <table className="table table-hover">
             <thead>
                 <tr>
@@ -73,30 +93,34 @@ const CustomerPagination = () => {
                 <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody>
-                { customers.map( (customer) => 
-                    <tr key={customer.id}>
-                        <th scope="row"> {customer.id} </th>
-                        <td> <a href="#"> {customer.lastname} {customer.firstname}</a> </td>
-                        <td> {customer.email} </td>
-                        <td>{customer.company}</td>
-                        <td> {customer.invoices.length} </td>
-                        <td> {customer.totalAmount.toLocaleString()}</td>
-                        <td>
-                            <Link to={"/customers/"+customer.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
-                            <button 
-                            disabled={ customer.invoices.length > 0}
-                            onClick={() =>onDelete(customer.id)} 
-                            className="btn btn-sm btn-danger">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                  )
-                }
-                
-            </tbody>
-        </table>
+
+                <tbody>
+                    { customers.map( (customer) => 
+                        <tr key={customer.id}>
+                            <th scope="row"> {customer.id} </th>
+                            <td> 
+                                 <Link to={"/customers/"+customer.id}> 
+                                    {customer.lastname} {customer.firstname}
+                                 </Link> 
+                            </td>
+                            <td> {customer.email} </td>
+                            <td>{customer.company}</td>
+                            <td> {customer.invoices.length} </td>
+                            <td> {customer.totalAmount.toLocaleString()}</td>
+                            <td>
+                                <Link to={"/customers/"+customer.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
+                                <button 
+                                disabled={ customer.invoices.length > 0}
+                                onClick={() =>onDelete(customer.id)} 
+                                className="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    )}          
+                </tbody>
+            
+        </table> 
 
         {totalItems > countItems 
          && <Pagination 
@@ -105,6 +129,7 @@ const CustomerPagination = () => {
                 countItems={countItems}
                 onHandlePageChange={handlePageChange}
         /> }
+    </>}
        
     </>
     );

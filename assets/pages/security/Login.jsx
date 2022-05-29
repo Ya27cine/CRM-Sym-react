@@ -2,7 +2,7 @@ import React, {useState, useContext} from 'react';
 import AuthApi from '../../services/AuthApi';
 import AuthContext from '../../context/AuthContext';
 import Field from '../../components/forms/Field';
-
+import { toast } from 'react-toastify';
 
 const Login = ({ history}) => {
 
@@ -25,11 +25,18 @@ const Login = ({ history}) => {
             await AuthApi.authenticate(credentials);
             setIsAuthenticated(true)
             setErrors('')
+            toast.success("login success ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 770
+              });
             // redirection   
             history.replace("/customers") 
             
         } catch (error) {
-           // console.log("error login",error)
+            toast.error("Email or password are not correct ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2770
+              });
             setErrors("error bad credentials")
         } 
     }
@@ -37,7 +44,7 @@ const Login = ({ history}) => {
     return ( 
         <>
           <form onSubmit={handleSubmit}>
-              <h1>Login</h1>
+              <h1>Login </h1>
                 
                 <Field 
                  name="username" 

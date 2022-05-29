@@ -1,13 +1,17 @@
-import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Field from '../../components/forms/Field';
 import Select from '../../components/forms/Select';
 import CustomerApi from '../../services/CustomerApi';
 import InvoiceApi from '../../services/InvoiceApi';
+import { toast } from 'react-toastify';
+import FormLoader from '../../components/loader/FormLoader';
+
 
 const InvoiceForm = ({match, history}) => {
     const {id = "new"}  = match.params
+
+    const [isLoading, setIsLoading] = useState(true)
 
     const [invoice, setInvoice] = useState({
         amount: '',
@@ -25,7 +29,7 @@ const InvoiceForm = ({match, history}) => {
     const [myCustomers, setMyCustomers] = useState([])
     const fetchMyCustomers = async () =>{
         await CustomerApi.findAll()
-        .then(   data   =>   setMyCustomers(  data ))
+        .then(   data   => {  setMyCustomers(  data ); setIsLoading(false) })
         .catch(  error  =>   console.log( error)    )
     }
    
@@ -58,8 +62,7 @@ const InvoiceForm = ({match, history}) => {
     /**
      * Get my list customers
      */
-    useEffect(() =>{ fetchMyCustomers() }, [])
-
+    useEffect(() =>{ fetchMyCustomers();}, [])
 
     const handleChange =  ( {currentTarget} ) => {
         let {name, value} = currentTarget
@@ -85,7 +88,12 @@ const InvoiceForm = ({match, history}) => {
             history.replace("/invoices")  
 
         } catch ({ response }) {
-            // TODO notify
+            // notify
+            toast.error("form has error ! ", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1770
+              });
+
             const apiErrors =  {};
             if( response && response.data && response.data.violations ){
                 const { violations } = response.data
@@ -102,57 +110,65 @@ const InvoiceForm = ({match, history}) => {
         <>
              {
             (isEditing && <h1 className="mb-3">Invoice modification</h1> ) 
-                       || <h1 className="mb-3">Invoice </h1>
+                       || <h1 className="mb-3">Create a invoice </h1>
         }  
 
-        <form onSubmit={handleSubmit}>
-            <Field 
-                name="amount" 
-                label="Amount"
-                type="number"
-                value={invoice.amount}  
-                placeholder="Amount Invoice"
-                onChange={handleChange} 
-                required="required"
-                errors={errors.amount} />
+        {
+            isLoading &&  <FormLoader />
+        }
 
-            <Select 
-                required="required"
-                name="customer" 
-                label="Customer" 
-                errors={errors.customer}
-                value={invoice.customer}
-                onChange={handleChange}
-                >
-                     <option key="_default" value="" > Choose customer</option>
-                    { myCustomers.map( (customer) => 
-                        <option key={customer.id} value={customer.id}> {customer.lastname} {customer.firstname}</option>
-                    )}       
-            </Select>
+        { 
+            ! isLoading &&
+            <>
+                <form onSubmit={handleSubmit}>
+                <Field 
+                    name="amount" 
+                    label="Amount"
+                    type="number"
+                    value={invoice.amount}  
+                    placeholder="Amount Invoice"
+                    onChange={handleChange} 
+                    required="required"
+                    errors={errors.amount} />
 
-            <Select 
-                required="required"
-                name="status" 
-                label="Status" 
-                errors={errors.status}
-                value={invoice.status}
-                onChange={handleChange}
-                >
-                    <option value="" > Choose Status</option>
-                    <option value="SENT">Sent</option>
-                    <option value="CANCELLED">Cancelled</option>
-                    <option value="PAID">Paid</option>
-            </Select>
+                <Select 
+                    required="required"
+                    name="customer" 
+                    label="Customer" 
+                    errors={errors.customer}
+                    value={invoice.customer}
+                    onChange={handleChange}
+                    >
+                        <option key="_default" value="" > Choose customer</option>
+                        { myCustomers.map( (customer) => 
+                            <option key={customer.id} value={customer.id}> {customer.lastname} {customer.firstname}</option>
+                        )}       
+                </Select>
 
-            <div className="form-group mt-2">
-                    { ( isEditing &&  <button className="btn btn-danger" type="submit">Edit</button>)
-                                  ||  <button className="btn btn-success" type="submit">Create</button>
-                    }
-                    <Link to="/invoices" className="btn btn-link">Back to the list</Link>
-            </div>
-        </form>
-        </>
-     );
+                <Select 
+                    required="required"
+                    name="status" 
+                    label="Status" 
+                    errors={errors.status}
+                    value={invoice.status}
+                    onChange={handleChange}
+                    >
+                        <option value="" > Choose Status</option>
+                        <option value="SENT">Sent</option>
+                        <option value="CANCELLED">Cancelled</option>
+                        <option value="PAID">Paid</option>
+                </Select>
+
+                <div className="form-group mt-2">
+                        { ( isEditing &&  <button className="btn btn-danger" type="submit">Edit</button>)
+                                    ||  <button className="btn btn-success" type="submit">Create</button>
+                        }
+                        <Link to="/invoices" className="btn btn-link">Back to the list</Link>
+                </div>
+            </form>
+        </>    
+        }
+     </>);
 }
  
 export default InvoiceForm;

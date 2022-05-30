@@ -15,6 +15,7 @@ import InvoiceForm from './pages/invoice/InvoiceForm';
 import Register from './pages/security/Register.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PATHS } from './config';
 
 // Load the JWT as soon as the React app starts
 /** ===>  */  AuthApi.setup()
@@ -32,13 +33,13 @@ const App = () =>{
             <NavbarWithRouter  />
             <main className="container pt-5">
                 <Switch>
-                    <PrivateRoute  path="/customers/:id"  component={CustomerForm}       /> 
-                    <PrivateRoute  path="/invoices/:id"   component={InvoiceForm}        /> 
-                    <PrivateRoute  path="/customers"      component={CustomerPagination} /> 
-                    <PrivateRoute  path="/invoices"       component={InvoicePagination}  /> 
-                    <Route         path="/register"       component={Register}           />
-                    <Route         path="/login"          component={Login}              />
-                    <Route         path="/"               component={Home}               />
+                    <PrivateRoute  path={PATHS.PATH_CUSTOMERS + "/:id"} component={CustomerForm}       /> 
+                    <PrivateRoute  path={PATHS.PATH_INVOICES  + "/:id"} component={InvoiceForm}        /> 
+                    <PrivateRoute  path={PATHS.PATH_CUSTOMERS}          component={CustomerPagination} /> 
+                    <PrivateRoute  path={PATHS.PATH_INVOICES}           component={InvoicePagination}  /> 
+                    <Route         path={PATHS.PATH_REGISTER}           component={Register}           />
+                    <Route         path={PATHS.PATH_LOGIN}              component={Login}              />
+                    <Route         path={PATHS.PATH_MAIN}               component={Home}               />
                 </Switch>
             </main>
         </HashRouter>

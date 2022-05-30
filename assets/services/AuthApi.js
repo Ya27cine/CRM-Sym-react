@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { URLS } from "../config";
 import Http from './Http'
 
 
@@ -31,7 +32,7 @@ function isAuthenticated(){
  * @param {object} credentials 
  */
  async function authenticate(credentials){
-    await Http.post("login_check", credentials)
+    await Http.post( URLS.URL_LOGIN , credentials)
         .then( response => response.data.token )
         .then( token => {
             window.localStorage.setItem("auth", token)
@@ -53,7 +54,7 @@ function logout(){
 }
 
 function register(user){
-   return Http.post("users", user)
+   return Http.post( URLS.URL_USERS , user)
 }
 
 

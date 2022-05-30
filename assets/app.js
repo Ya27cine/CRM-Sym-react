@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import ReactDom from 'react-dom';
 import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
+import { PATHS } from './config';
 import AuthContext from './context/AuthContext';
-import CustomerPagination from './pages/customer/CustomerPagination';
 import CustomerForm from './pages/customer/CustomerForm';
+import CustomerPagination from './pages/customer/CustomerPagination';
 import Home from './pages/Home';
+import InvoiceForm from './pages/invoice/InvoiceForm';
 import InvoicePagination from './pages/invoice/InvoicePagination';
 import Login from './pages/security/Login';
+import Register from './pages/security/Register.jsx';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
-import InvoiceForm from './pages/invoice/InvoiceForm';
-import Register from './pages/security/Register.jsx';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { PATHS } from './config';
 
 // Load the JWT as soon as the React app starts
 /** ===>  */  AuthApi.setup()

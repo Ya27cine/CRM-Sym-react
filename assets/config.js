@@ -1,5 +1,5 @@
-export const URL_HOST = "https://localhost:8000/api/"
-
+//export const URL_HOST = "https://localhost:8000/api/"
+export const URL_HOST = process.env.API_URL
 
 /**
  *  ALL Urls :

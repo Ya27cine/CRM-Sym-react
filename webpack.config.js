@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 const Encore = require('@symfony/webpack-encore');
+
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -71,5 +74,10 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 ;
+
+Encore.configureDefinePlugin( (options) => {
+        options['process.env'].API_URL = process.env.API_URL
+})
+
 
 module.exports = Encore.getWebpackConfig();

@@ -1,9 +1,10 @@
+import { URLS } from '../config'
 import Http from './Http'
 
 
 const findAll = async  (countItems, currentPage, search) => {
    return await
-        Http.get("invoices?pagination=true&count="+countItems
+        Http.get( URLS.URL_INVOICES + "?pagination=true&count="+countItems
                  +"&page="+currentPage+"&status="+search)
 }
 
@@ -11,7 +12,7 @@ const findAll = async  (countItems, currentPage, search) => {
   *  get one invoice
   */
 const find =  (id) => {
-    return Http.get("invoices/"+id)
+    return Http.get( URLS.URL_INVOICES + "/" + id)
                .then((rep) => rep.data)
  }
 
@@ -20,7 +21,7 @@ const find =  (id) => {
   */
 const post = (invoice) => {
     invoice = invoice.customer ? { ...invoice, ...setInvoiceCustomer(invoice.customer) } : invoice;
-    return  Http.post("invoices", invoice);
+    return  Http.post( URLS.URL_INVOICES, invoice);
 }
 
 
@@ -30,7 +31,7 @@ const post = (invoice) => {
 const put = (id, invoice) => {
     invoice = invoice.customer ? { ...invoice, ...setInvoiceCustomer(invoice.customer) }  : invoice;
 
-    return Http.put("invoices/"+id, invoice);
+    return Http.put( URLS.URL_INVOICES + "/" + id, invoice);
 }
 
 

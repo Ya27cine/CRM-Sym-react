@@ -16,7 +16,6 @@ const InvoiceForm = ({match, history}) => {
         amount: '',
         customer: '',
         status: '',
-        age: ''
     });
     const [errors, setErrors] = useState({
         amount: '',
@@ -82,17 +81,22 @@ const InvoiceForm = ({match, history}) => {
             if(isEditing){
                 await InvoiceApi.put( id, invoice )
             }else{
+                console.log("=============>", invoice)
                 await InvoiceApi.post( invoice )
             }         
             setErrors({})
             history.replace("/invoices")  
 
-        } catch ({ response }) {
+        } catch (error) {
             // notify
             toast.error("form has error ! ", {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 1770
               });
+
+              console.log(error)
+
+            const { response } = error
 
             const apiErrors =  {};
             if( response && response.data && response.data.violations ){

@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @extends ServiceEntityRepository<Invoice>
@@ -49,7 +50,9 @@ class InvoiceRepository extends ServiceEntityRepository
     }
 
     public function findLastChrono(User $user){
-        return $this->createQueryBuilder('i')
+       
+        try{
+            return  $this->createQueryBuilder('i')
             ->select('i.chrono')
             ->join('i.customer', 'c')
             ->Where('c.userUp = :user')
@@ -57,8 +60,11 @@ class InvoiceRepository extends ServiceEntityRepository
             ->orderBy('i.chrono','DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleScalarResult() + 1
-        ;
+            ->getSingleScalarResult() + 1;
+        }catch(Exception $e){
+           // return 0 as initial value of CHRONO
+            return 0;
+        }       
     }
 
     // /**

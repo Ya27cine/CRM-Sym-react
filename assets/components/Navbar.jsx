@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import AuthApi from '../services/AuthApi';
@@ -10,10 +10,11 @@ import ConfigDrawer from './drawer/ConfigDrawer';
 const Navbar = ({ history }) => {
  
   const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext)
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   const handleLogout = () => {
     AuthApi.logout() // delete token
-    setIsAuthenticated( false )
+    setIsAuthenticated( true )
 
      // notify
      toast.success("Logout success ! ", {
@@ -24,15 +25,26 @@ const Navbar = ({ history }) => {
     history.push("/login") // redirection
   }
 
+  const handleNavCollapsed = () => {
+    setIsNavCollapsed( ! isNavCollapsed )
+  }
+
   return ( 
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
           <div className="container-fluid">
             <NavLink className="navbar-brand" to="/">Gestion Client</NavLink>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button className="navbar-toggler" onClick={handleNavCollapsed}  
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarColor02" 
+                    aria-controls="navbarColor02" 
+                    aria-expanded={isNavCollapsed ? true : false}
+                    aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
         
-            <div className="collapse navbar-collapse" id="navbarColor02">
+            <div className={ (isNavCollapsed &&  'collapse') + " navbar-collapse"} id="navbarColor02">
               <ul className="navbar-nav me-auto">
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/customers">Customers</NavLink>

@@ -22,44 +22,41 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager ): void
     {
         $faker = Factory::create('fr_FR');
+        $chrono = 1;
 
-          // create Users
-        for ($c=0; $c < 17; $c++) { 
-            $chrono = 1;
+         // create Users
+        $user = new User();
+        $user->setEmail("test@prostam.fr")
+            ->setLastname("Khelifa")
+            ->setFirstname("Yassine")
+            ->setPassword( $this->encoder->encodePassword($user,  'password' ));
+
+        $manager->persist($user);
+    
+        // create customers
+        for ($i=0; $i < 17; $i++) { 
+            $customer  = new Customer();
+            $customer->setFirstname($faker->firstName)
+            ->setLastname($faker->lastName)
+            ->setEmail($faker->email)
+            ->setUserUp($user)
+            ->setCompany($faker->company);
             
-            $user = new User();
-            $user->setEmail($faker->email)
-                ->setLastname($faker->lastName)
-                ->setFirstname($faker->firstName)
-                ->setPassword( $this->encoder->encodePassword($user,  'password' ));
+            $manager->persist($customer);
+            // create Invoices
+            for ($j=0; $j < 6; $j++) { 
+                $invoice = new Invoice();
+                $invoice->setAmount( $faker->randomFloat(2, 250, 5000))
+                ->setCustomer($customer)
+                ->setSentAt( $faker->dateTimeBetween('-6 months'))
+                ->setStatus( $faker->randomElement(['PAID', 'CANCELLED', 'SENT']))
+                ->setChrono($chrono++);
 
-                $manager->persist($user);
-        
-                    // create customers
-                    for ($i=0; $i < mt_rand(3,7); $i++) { 
-                        $customer  = new Customer();
-                        $customer->setFirstname($faker->firstName)
-                        ->setLastname($faker->lastName)
-                        ->setEmail($faker->email)
-                        ->setUserUp($user)
-                        ->setCompany($faker->company);
-                        
-                        $manager->persist($customer);
-                        // create Invoices
-                        for ($j=0; $j < mt_rand(3,7); $j++) { 
-                            $invoice = new Invoice();
-                            $invoice->setAmount( $faker->randomFloat(2, 250, 5000))
-                            ->setCustomer($customer)
-                            ->setSentAt( $faker->dateTimeBetween('-6 months'))
-                            ->setStatus( $faker->randomElement(['PAID', 'CANCELLED', 'SENT']))
-                            ->setChrono($chrono++);
+                $manager->persist($invoice);
+            }// invoice
 
-                            $manager->persist($invoice);
-                        }// invoice
+        }// customer
 
-                    }// customer
-
-            }// user
 
         // run :
         $manager->flush();

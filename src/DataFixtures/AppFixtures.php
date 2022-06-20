@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
             
             $manager->persist($customer);
             // create Invoices
-            for ($j=0; $j < 7; $j++) { 
+            for ($j=0; $j < mt_rand(0,10); $j++) { 
                 $invoice = new Invoice();
                 $invoice->setAmount( $faker->randomFloat(2, 250, 5000))
                 ->setCustomer($customer)

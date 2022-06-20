@@ -5,12 +5,13 @@ import AuthApi from '../services/AuthApi';
 import { toast } from 'react-toastify';
 import AlertDialog from './AlertDialog/AlertDialog';
 import ConfigDrawer from './drawer/ConfigDrawer';
-
+import { FaGithub } from 'react-icons/fa';
 
 const Navbar = ({ history }) => {
  
   const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext)
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const link_source_code = "https://github.com/Ya27cine/CRM-Sym-react";
 
   const handleLogout = () => {
     AuthApi.logout() // delete token
@@ -53,8 +54,13 @@ const Navbar = ({ history }) => {
                   <NavLink className="nav-link" to="/invoices">Invoices</NavLink>
                 </li>
               </ul>
-              <ul className="navbar-nav ml-auto">
-               
+              <ul className="navbar-nav ml-auto">       
+                <li className="nav-item mx-4">
+                    <a className="btn btn-success" href={link_source_code}>
+                       <FaGithub /> source code
+                    </a>                    
+                  </li>    
+
                { ( ! isAuthenticated 
                   &&
                   <>
@@ -78,7 +84,8 @@ const Navbar = ({ history }) => {
                     <ConfigDrawer />
                   </li>
                   </>    
-                )}                                       
+                )} 
+              
               </ul>
             </div>
           </div>

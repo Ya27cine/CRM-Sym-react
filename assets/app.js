@@ -17,6 +17,7 @@ import Register from './pages/security/Register.jsx';
 import AuthApi from './services/AuthApi';
 import './styles/app.css';
 
+
 // Load the JWT as soon as the React app starts
 /** ===>  */  AuthApi.setup()
  

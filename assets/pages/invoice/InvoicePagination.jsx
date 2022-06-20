@@ -89,7 +89,8 @@ const InvoicePagination = () => {
                             <td>               
                                 <Link to={"/invoices/"+invoice.id} className="btn btn-sm btn-primary mx-2">Edit</Link>
                                 <button 
-                                disabled={ invoice.status !== "CANCELLED"}
+                                // disabled={ invoice.status !== "CANCELLED"}
+                                disabled="true"
                                 className="btn btn-sm btn-danger">
                                     Archived
                                 </button>
